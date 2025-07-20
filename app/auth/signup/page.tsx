@@ -38,7 +38,7 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       {/* Breadcrumb */}
-      <div className="absolute top-6 left-6 flex items-center space-x-2 text-sm text-gray-600">
+      <div className="absolute top-6 left-6 hidden lg:flex items-center space-x-2 text-sm text-gray-600">
         <span>Dashboard</span>
         <span>/</span>
         <span className="text-blue-600 font-medium">Crear Cuenta</span>
@@ -327,7 +327,7 @@ export default function SignUpPage() {
         </div>
 
         {/* Panel de Bienvenida */}
-        <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-xl p-8 text-white flex flex-col justify-center">
+        <div className="hidden lg:flex bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-xl p-8 text-white flex-col justify-center">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
               <svg
