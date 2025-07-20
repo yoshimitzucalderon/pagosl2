@@ -46,32 +46,18 @@ export default function AuthLogin() {
             <p className="text-gray-600">Iniciar Sesión</p>
           </div>
 
-          {/* Botón Google */}
-          <button className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-200 mb-6">
-            <span className="mr-3">🔍</span>
-            Iniciar sesión con Google
-          </button>
 
-          {/* Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">O inicia sesión con correo electrónico</span>
-            </div>
-          </div>
 
           {/* Formulario */}
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="correo" className="block text-sm font-medium text-gray-700 mb-2">
                 Correo Electrónico
               </label>
               <div className="relative">
                 <input
-                  id="email"
+                  id="correo"
                   name="email"
                   type="email"
                   autoComplete="email"
@@ -91,12 +77,12 @@ export default function AuthLogin() {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="contraseña" className="block text-sm font-medium text-gray-700 mb-2">
                 Contraseña
               </label>
               <div className="relative">
                 <input
-                  id="password"
+                  id="contraseña"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
@@ -125,14 +111,14 @@ export default function AuthLogin() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
-                  id="rememberMe"
+                  id="recordarme"
                   name="rememberMe"
                   type="checkbox"
                   checked={formData.rememberMe}
                   onChange={handleChange}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-600">
+                <label htmlFor="recordarme" className="ml-2 block text-sm text-gray-600">
                   Recordarme
                 </label>
               </div>

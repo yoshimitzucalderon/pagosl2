@@ -41,47 +41,34 @@ export default function SignUpPage() {
       <div className="absolute top-6 left-6 flex items-center space-x-2 text-sm text-gray-600">
         <span>Dashboard</span>
         <span>/</span>
-        <span className="text-blue-600 font-medium">Sign Up</span>
+        <span className="text-blue-600 font-medium">Crear Cuenta</span>
       </div>
 
       {/* Main Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl w-full">
         {/* Formulario de Registro */}
         <div className="bg-white rounded-2xl shadow-lg p-8">
-          {/* Logo NextAdmin */}
+          {/* Logo Sistema de Pagos */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4">
-              <span className="text-2xl font-bold text-white">N</span>
+              <span className="text-2xl font-bold text-white">💰</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">NextAdmin</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Sistema de Pagos</h2>
+            <p className="text-gray-600">Crear Cuenta</p>
           </div>
 
-          {/* Botón Google */}
-          <button className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-200 mb-6">
-            <span className="mr-3">🔍</span>
-            Sign up with Google
-          </button>
 
-          {/* Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or sign up with email</span>
-            </div>
-          </div>
 
           {/* Formulario */}
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name
+                <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre
                 </label>
                 <input
-                  id="firstName"
+                  id="nombre"
                   name="firstName"
                   type="text"
                   autoComplete="given-name"
@@ -89,15 +76,15 @@ export default function SignUpPage() {
                   value={formData.firstName}
                   onChange={handleChange}
                   className="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
-                  placeholder="First name"
+                  placeholder="Tu nombre"
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name
+                <label htmlFor="apellido" className="block text-sm font-medium text-gray-700 mb-2">
+                  Apellido
                 </label>
                 <input
-                  id="lastName"
+                  id="apellido"
                   name="lastName"
                   type="text"
                   autoComplete="family-name"
@@ -105,19 +92,19 @@ export default function SignUpPage() {
                   value={formData.lastName}
                   onChange={handleChange}
                   className="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
-                  placeholder="Last name"
+                  placeholder="Tu apellido"
                 />
               </div>
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email
+              <label htmlFor="correo" className="block text-sm font-medium text-gray-700 mb-2">
+                Correo Electrónico
               </label>
               <div className="relative">
                 <input
-                  id="email"
+                  id="correo"
                   name="email"
                   type="email"
                   autoComplete="email"
@@ -125,7 +112,7 @@ export default function SignUpPage() {
                   value={formData.email}
                   onChange={handleChange}
                   className="block w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
-                  placeholder="Enter your email"
+                  placeholder="Ingresa tu correo electrónico"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
@@ -137,12 +124,12 @@ export default function SignUpPage() {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+              <label htmlFor="contraseña" className="block text-sm font-medium text-gray-700 mb-2">
+                Contraseña
               </label>
               <div className="relative">
                 <input
-                  id="password"
+                  id="contraseña"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
@@ -150,7 +137,7 @@ export default function SignUpPage() {
                   value={formData.password}
                   onChange={handleChange}
                   className="block w-full px-4 py-3 pr-16 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
-                  placeholder="Create a password"
+                  placeholder="Crea una contraseña segura"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
@@ -169,12 +156,12 @@ export default function SignUpPage() {
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
+              <label htmlFor="confirmarContraseña" className="block text-sm font-medium text-gray-700 mb-2">
+                Confirmar Contraseña
               </label>
               <div className="relative">
                 <input
-                  id="confirmPassword"
+                  id="confirmarContraseña"
                   name="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
                   autoComplete="new-password"
@@ -182,7 +169,7 @@ export default function SignUpPage() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="block w-full px-4 py-3 pr-16 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
-                  placeholder="Confirm your password"
+                  placeholder="Confirma tu contraseña"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
@@ -202,21 +189,21 @@ export default function SignUpPage() {
             {/* Terms */}
             <div className="flex items-start">
               <input
-                id="agreeToTerms"
+                id="aceptarTérminos"
                 name="agreeToTerms"
                 type="checkbox"
                 checked={formData.agreeToTerms}
                 onChange={handleChange}
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
               />
-              <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-600">
-                I agree to the{' '}
+              <label htmlFor="aceptarTérminos" className="ml-2 block text-sm text-gray-600">
+                Acepto los{' '}
                 <Link href="/terms" className="text-blue-600 hover:text-blue-700 font-medium">
-                  Terms of Service
+                  Términos de Servicio
                 </Link>{' '}
-                and{' '}
+                y la{' '}
                 <Link href="/privacy" className="text-blue-600 hover:text-blue-700 font-medium">
-                  Privacy Policy
+                  Política de Privacidad
                 </Link>
               </label>
             </div>
@@ -230,10 +217,10 @@ export default function SignUpPage() {
               {isLoading ? (
                 <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Creating account...
+                  Creando cuenta...
                 </div>
               ) : (
-                'Create Account'
+                'Crear Cuenta'
               )}
             </button>
           </form>
@@ -241,12 +228,12 @@ export default function SignUpPage() {
           {/* Sign In Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
+              ¿Ya tienes una cuenta?{' '}
               <Link
                 href="/auth/signin"
                 className="font-medium text-blue-600 hover:text-blue-700"
               >
-                Sign In
+                Iniciar sesión
               </Link>
             </p>
           </div>
@@ -256,12 +243,12 @@ export default function SignUpPage() {
         <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-xl p-8 text-white flex flex-col justify-center">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
-              <span className="text-3xl font-bold">N</span>
+              <span className="text-3xl">💰</span>
             </div>
-            <h2 className="text-3xl font-bold mb-4">Create your account</h2>
-            <h3 className="text-4xl font-bold mb-6">Join Us!</h3>
+            <h2 className="text-3xl font-bold mb-4">Crea tu cuenta</h2>
+            <h3 className="text-4xl font-bold mb-6">¡Únete a nosotros!</h3>
             <p className="text-lg text-blue-100 leading-relaxed">
-              Start your journey with NextAdmin by creating your account. Get access to powerful dashboard features.
+              Comienza tu viaje con Sistema de Pagos creando tu cuenta. Obtén acceso a potentes funciones de dashboard.
             </p>
           </div>
         </div>

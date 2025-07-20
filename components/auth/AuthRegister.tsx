@@ -50,32 +50,18 @@ export default function AuthRegister() {
             <p className="text-gray-600">Crear Cuenta</p>
           </div>
 
-          {/* Botón Google */}
-          <button className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-200 mb-6">
-            <span className="mr-3">🔍</span>
-            Registrarse con Google
-          </button>
 
-          {/* Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">O regístrate con correo electrónico</span>
-            </div>
-          </div>
 
           {/* Formulario */}
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-2">
                   Nombre
                 </label>
                 <input
-                  id="firstName"
+                  id="nombre"
                   name="firstName"
                   type="text"
                   autoComplete="given-name"
@@ -87,11 +73,11 @@ export default function AuthRegister() {
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="apellido" className="block text-sm font-medium text-gray-700 mb-2">
                   Apellido
                 </label>
                 <input
-                  id="lastName"
+                  id="apellido"
                   name="lastName"
                   type="text"
                   autoComplete="family-name"
@@ -106,12 +92,12 @@ export default function AuthRegister() {
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="correo" className="block text-sm font-medium text-gray-700 mb-2">
                 Correo Electrónico
               </label>
               <div className="relative">
                 <input
-                  id="email"
+                  id="correo"
                   name="email"
                   type="email"
                   autoComplete="email"
@@ -131,12 +117,12 @@ export default function AuthRegister() {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="contraseña" className="block text-sm font-medium text-gray-700 mb-2">
                 Contraseña
               </label>
               <div className="relative">
                 <input
-                  id="password"
+                  id="contraseña"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
@@ -163,12 +149,12 @@ export default function AuthRegister() {
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="confirmarContraseña" className="block text-sm font-medium text-gray-700 mb-2">
                 Confirmar Contraseña
               </label>
               <div className="relative">
                 <input
-                  id="confirmPassword"
+                  id="confirmarContraseña"
                   name="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
                   autoComplete="new-password"
@@ -196,14 +182,14 @@ export default function AuthRegister() {
             {/* Terms */}
             <div className="flex items-start">
               <input
-                id="agreeToTerms"
+                id="aceptarTérminos"
                 name="agreeToTerms"
                 type="checkbox"
                 checked={formData.agreeToTerms}
                 onChange={handleChange}
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
               />
-              <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-600">
+              <label htmlFor="aceptarTérminos" className="ml-2 block text-sm text-gray-600">
                 Acepto los{' '}
                 <Link href="/terms" className="text-blue-600 hover:text-blue-700 font-medium">
                   Términos de Servicio
