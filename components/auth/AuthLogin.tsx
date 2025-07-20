@@ -58,7 +58,7 @@ export default function AuthLogin() {
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">O inicia sesión con email</span>
+              <span className="px-2 bg-white text-gray-500">O inicia sesión con correo electrónico</span>
             </div>
           </div>
 
@@ -67,7 +67,7 @@ export default function AuthLogin() {
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email
+                Correo Electrónico
               </label>
               <div className="relative">
                 <input
@@ -79,7 +79,7 @@ export default function AuthLogin() {
                   value={formData.email}
                   onChange={handleChange}
                   className="block w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
-                  placeholder="Ingresa tu email"
+                  placeholder="Ingresa tu correo electrónico"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">

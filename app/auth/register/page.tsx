@@ -3,8 +3,8 @@ import AuthRegister from "../../../components/auth/AuthRegister";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Registro de Usuario",
-  description: "Crear nueva cuenta en Sistema de Pagos",
+  title: "Crear Cuenta - Sistema de Pagos",
+  description: "Regístrate en el Sistema de Pagos",
 };
 
 const Register = () => {

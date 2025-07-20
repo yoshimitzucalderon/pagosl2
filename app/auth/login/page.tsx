@@ -3,8 +3,8 @@ import AuthLogin from "../../../components/auth/AuthLogin";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Autenticación de Login",
-  description: "Generado por create next app",
+  title: "Iniciar Sesión - Sistema de Pagos",
+  description: "Accede a tu cuenta en el Sistema de Pagos",
 };
 
 const Login = () => {
