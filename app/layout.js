@@ -1,18 +1,15 @@
 import './globals.css'
-import { AuthProvider } from '../components/auth/AuthProvider'
 
 export const metadata = {
-  title: 'Sistema de Gestión de Pagos',
-  description: 'Sistema completo de gestión de pagos con autenticación y procesamiento inteligente',
+  title: 'Payment Management System',
+  description: 'Complete payment management system with authentication and intelligent processing',
 }
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
+    <html lang="en">
       <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        {children}
       </body>
     </html>
   )

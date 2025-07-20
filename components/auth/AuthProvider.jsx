@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
           router.push('/');
         } else if (event === 'SIGNED_OUT') {
           // Redirigir a login después del logout
-          router.push('/login');
+          router.push('/auth/signin');
         }
       }
     );

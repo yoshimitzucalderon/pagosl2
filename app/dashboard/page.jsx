@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
-import OptionSelector from '@/components/OptionSelector';
 import StatsWidget from '@/components/StatsWidget';
 import PaymentHistory from '@/components/PaymentHistory';
+import OptionSelector from '@/components/OptionSelector';
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
