@@ -36,10 +36,19 @@ export default function ForgotPasswordPage() {
           {/* Logo/Branding */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4">
-              <span className="text-2xl font-bold text-white">SP</span>
+              <svg
+                className="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="12" cy="12" r="10" strokeWidth="2" />
+                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12 6v2m0 8v2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Sistema de Pagos</h1>
-            <p className="text-gray-600">Gestión de Campañas Sociales</p>
           </div>
 
           {/* Card Principal */}
@@ -70,12 +79,7 @@ export default function ForgotPasswordPage() {
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="mt-8 text-center">
-            <p className="text-xs text-gray-500">
-              © 2024 Sistema de Pagos. Todos los derechos reservados.
-            </p>
-          </div>
+
         </div>
       </div>
     );
@@ -85,13 +89,22 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Logo/Branding */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4">
-            <span className="text-2xl font-bold text-white">SP</span>
+                  <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="12" cy="12" r="10" strokeWidth="2" />
+                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12 6v2m0 8v2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Sistema de Pagos</h1>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Sistema de Pagos</h1>
-          <p className="text-gray-600">Gestión de Campañas Sociales</p>
-        </div>
 
         {/* Card Principal */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -165,12 +178,7 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="mt-8 text-center">
-          <p className="text-xs text-gray-500">
-            © 2024 Sistema de Pagos. Todos los derechos reservados.
-          </p>
-        </div>
+        
       </div>
     </div>
   );
