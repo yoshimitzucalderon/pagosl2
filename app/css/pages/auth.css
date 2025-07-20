@@ -1,0 +1,50 @@
+/* Auth Pages */
+.auth-page {
+  @apply min-h-screen bg-gray-50 flex items-center justify-center p-4;
+}
+
+.auth-card {
+  @apply bg-white rounded-2xl shadow-xl p-8 max-w-md w-full;
+}
+
+.auth-logo {
+  @apply text-center mb-8;
+}
+
+.auth-form {
+  @apply space-y-6;
+}
+
+.auth-input {
+  @apply block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200;
+}
+
+.auth-button {
+  @apply w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200;
+}
+
+/* Auth Background Circles */
+.circle-top {
+  position: absolute;
+  top: -33%;
+  left: -14%;
+  border: 120px solid #0b2947;
+  height: 700px;
+  width: 700px;
+  display: block;
+  background: 0 0;
+  border-radius: 100%;
+  z-index: 1;
+}
+
+.circle-bottom {
+  position: absolute;
+  bottom: -4%;
+  right: 1%;
+  height: 450px;
+  width: 450px;
+  display: block;
+  background: 0 0;
+  z-index: 1;
+  opacity: .5;
+} 

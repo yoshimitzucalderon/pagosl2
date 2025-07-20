@@ -1,0 +1,22 @@
+/* Widgets */
+.widget-card {
+  @apply bg-white rounded-xl shadow-sm p-6;
+}
+
+.widget-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.widget-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+/* Primary Gradient Background */
+.bg-primary-gt {
+  background: linear-gradient(261.23deg, var(--color-primary), #5a52ff 100%) !important;
+}
+
+/* Revenue Chart */
+.revenuechart .apexcharts-bar-series.apexcharts-plot-series .apexcharts-series path {
+  clip-path: inset(0 0 5% 0 round 20px);
+} 

@@ -1,0 +1,52 @@
+/* Front Pages */
+.frontpage {
+  @apply min-h-screen bg-gray-50;
+}
+
+.frontpage-header {
+  @apply bg-white shadow-sm;
+}
+
+.frontpage-content {
+  @apply py-12;
+}
+
+/* Light Button Background */
+.bg-lightbtn {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Container with specific width */
+.container-1218 {
+  max-width: 1218px;
+  padding: 0 20px;
+}
+
+/* Marquee Animations */
+.marquee1-group {
+  animation: marquee 45s linear infinite;
+}
+
+.marquee2-group {
+  animation: marquee2 45s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-2086px, 0, 0);
+  }
+}
+
+@keyframes marquee2 {
+  0% {
+    transform: translate3d(-2086px, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+} 

@@ -230,8 +230,8 @@ export default function AuthLogin() {
                 <path d="M12 6v2m0 8v2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold mb-4">Inicia sesión en tu cuenta</h2>
-            <h3 className="text-4xl font-bold mb-6">¡Bienvenido de vuelta!</h3>
+            <h2 className="text-3xl font-bold mb-4 text-white">Inicia sesión en tu cuenta</h2>
+            <h3 className="text-4xl font-bold mb-6 text-white">¡Bienvenido de vuelta!</h3>
             <p className="text-lg text-blue-100 leading-relaxed">
               Por favor inicia sesión en tu cuenta completando los campos necesarios a continuación
             </p>
