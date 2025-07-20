@@ -81,7 +81,7 @@ export default function SignInPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
+                  className="form-input form-input-email"
                   placeholder="Ingresa tu correo electrónico"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -115,7 +115,7 @@ export default function SignInPage() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 pr-16 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
+                  className="form-input form-input-password"
                   placeholder="Ingresa tu contraseña"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">

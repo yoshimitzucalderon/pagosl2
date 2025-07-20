@@ -713,3 +713,26 @@ html[dir="rtl"] table tr td {
     transform: translateX(0);
   }
 } 
+
+  /* Form Input Styles */
+  .form-input {
+    @apply block w-full px-4 py-3 rounded-xl transition duration-200 text-gray-800;
+    border: 1px solid #6b7280; /* gray-500 - más delgado */
+  }
+
+  .form-input:focus {
+    @apply outline-none focus:ring-2 focus:ring-blue-500;
+    border: 1px solid #3b82f6; /* blue-500 - mismo grosor delgado */
+  }
+
+  .form-input-email {
+    @apply pr-12;
+  }
+
+  .form-input-password {
+    @apply pr-16;
+  }
+
+  .form-input-with-left-icon {
+    @apply pl-10;
+  } 

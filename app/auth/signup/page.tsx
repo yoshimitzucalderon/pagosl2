@@ -85,7 +85,7 @@ export default function SignUpPage() {
                   required
                   value={formData.firstName}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
+                  className="form-input"
                   placeholder="Tu nombre"
                 />
               </div>
@@ -101,7 +101,7 @@ export default function SignUpPage() {
                   required
                   value={formData.lastName}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
+                  className="form-input"
                   placeholder="Tu apellido"
                 />
               </div>
@@ -121,7 +121,7 @@ export default function SignUpPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
+                  className="form-input form-input-email"
                   placeholder="Ingresa tu correo electrónico"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -155,7 +155,7 @@ export default function SignUpPage() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 pr-16 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
+                  className="form-input form-input-password"
                   placeholder="Crea una contraseña segura"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
@@ -221,7 +221,7 @@ export default function SignUpPage() {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 pr-16 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-gray-800"
+                  className="form-input form-input-password"
                   placeholder="Confirma tu contraseña"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
@@ -342,10 +342,10 @@ export default function SignUpPage() {
                 <path d="M12 6v2m0 8v2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold mb-4">Crea tu cuenta</h2>
-            <h3 className="text-4xl font-bold mb-6">¡Únete a nosotros!</h3>
+            <h2 className="text-3xl font-bold mb-4 text-white">Crea tu cuenta</h2>
+            <h3 className="text-4xl font-bold mb-6 text-white">¡Únete a nosotros!</h3>
             <p className="text-lg text-blue-100 leading-relaxed">
-              Comienza tu viaje con Sistema de Pagos creando tu cuenta. Obtén acceso a potentes funciones de dashboard.
+              Comienza tu viaje con Sistema de Pagos creando tu cuenta.
             </p>
           </div>
         </div>
