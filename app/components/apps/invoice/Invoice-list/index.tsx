@@ -15,6 +15,12 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { mutate } from "swr";
+import {
+  createColumnHelper,
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+} from "@tanstack/react-table";
 
 function InvoiceList() {
   const { invoices, deleteInvoice } = useContext(InvoiceContext);
@@ -150,6 +156,95 @@ function InvoiceList() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
+  // --- Tabla editable para pagos L2 ---
+  const columnHelper = createColumnHelper<any>();
+  const editableColumns = [
+    columnHelper.accessor("fechaPago", {
+      header: () => <span>Fecha de pago</span>,
+      cell: (info) => <span>{info.getValue()}</span>,
+    }),
+    columnHelper.accessor("proveedor", {
+      header: () => <span>Proveedor</span>,
+      cell: (info) => <span>{info.getValue()}</span>,
+    }),
+    columnHelper.accessor("concepto", {
+      header: () => <span>Concepto</span>,
+      cell: (info) => <span>{info.getValue()}</span>,
+    }),
+    columnHelper.accessor("moneda", {
+      header: () => <span>Moneda</span>,
+      cell: (info) => <span>{info.getValue()}</span>,
+    }),
+    columnHelper.accessor("importe", {
+      header: () => <span>Importe neto pagado</span>,
+      cell: (info) => <span>{info.getValue()}</span>,
+    }),
+    columnHelper.accessor("notas", {
+      header: () => <span>Notas</span>,
+      cell: (info) => <span>{info.getValue()}</span>,
+    }),
+    columnHelper.display({
+      id: "edit",
+      header: () => <span>Editar</span>,
+      cell: ({ row }) => (
+        <button
+          onClick={() => handleEditEditableRow(row.original)}
+          className="text-blue-500"
+        >
+          Editar
+        </button>
+      ),
+    }),
+  ];
+
+  // Estado para la tabla editable
+  const [editableRows, setEditableRows] = useState([
+    {
+      id: 1,
+      fechaPago: "",
+      proveedor: "",
+      concepto: "",
+      moneda: "",
+      importe: "",
+      notas: "",
+    },
+  ]);
+  const [editEditableRowId, setEditEditableRowId] = useState(null);
+  const [editedEditableRow, setEditedEditableRow] = useState(null);
+
+  const editableTable = useReactTable({
+    data: editableRows,
+    columns: editableColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  function handleEditEditableRow(row) {
+    setEditEditableRowId(row.id);
+    setEditedEditableRow({ ...row });
+  }
+  function handleSaveEditableRow() {
+    setEditableRows(editableRows.map(r => r.id === editedEditableRow.id ? editedEditableRow : r));
+    setEditEditableRowId(null);
+    setEditedEditableRow(null);
+  }
+  function handleChangeEditableRow(e, field) {
+    setEditedEditableRow({ ...editedEditableRow, [field]: e.target.value });
+  }
+  function handleAddEditableRow() {
+    setEditableRows([
+      ...editableRows,
+      {
+        id: Date.now(),
+        fechaPago: "",
+        proveedor: "",
+        concepto: "",
+        moneda: "",
+        importe: "",
+        notas: "",
+      },
+    ]);
+  }
 
   return (
     <div className="space-y-6">
@@ -326,6 +421,56 @@ function InvoiceList() {
           ))}
         </Table.Body>
       </Table>
+
+      {/* Tabla editable de pagos L2 */}
+      <div className="mt-10">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-bold">Pagos L2 (editable)</h3>
+          <button onClick={handleAddEditableRow} className="bg-blue-500 text-white px-3 py-1 rounded">Agregar fila</button>
+        </div>
+        <div className="overflow-x-auto border rounded">
+          <table className="min-w-full">
+            <thead>
+              {editableTable.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <th key={header.id} className="px-4 py-2 text-left bg-gray-100">{flexRender(header.column.columnDef.header, header.getContext())}</th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {editableTable.getRowModel().rows.map(row => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map(cell => (
+                    <td key={cell.id} className="px-4 py-2">
+                      {editEditableRowId === row.original.id && cell.column.id !== "edit" ? (
+                        <input
+                          type="text"
+                          value={editedEditableRow[cell.column.id] || ""}
+                          onChange={e => handleChangeEditableRow(e, cell.column.id)}
+                          className="border rounded px-2 py-1 w-full"
+                        />
+                      ) : cell.column.id === "edit" ? (
+                        editEditableRowId === row.original.id ? (
+                          <>
+                            <button onClick={handleSaveEditableRow} className="text-green-600 mr-2">Guardar</button>
+                            <button onClick={() => setEditEditableRowId(null)} className="text-red-600">Cancelar</button>
+                          </>
+                        ) : (
+                          <button onClick={() => handleEditEditableRow(row.original)} className="text-blue-500">Editar</button>
+                        )
+                      ) : (
+                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Delete Confirmation Modal */}
       <Modal show={openDeleteDialog} onClose={handleCloseDeleteDialog}>
