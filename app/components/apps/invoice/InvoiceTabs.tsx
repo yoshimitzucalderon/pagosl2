@@ -8,15 +8,18 @@ const InvoiceTabs = () => {
   const pathname = usePathname();
 
   const getActiveTab = () => {
-    if (pathname.includes('/invoice/create')) return 'create';
-    if (pathname.includes('/invoice/edit')) return 'edit';
-    if (pathname.includes('/invoice/detail')) return 'detail';
-    if (pathname.includes('/invoice/list')) return 'list';
-    return 'list';
+    if (pathname.includes('/invoice/create')) return 0;
+    if (pathname.includes('/invoice/edit')) return 1;
+    if (pathname.includes('/invoice/detail')) return 2;
+    if (pathname.includes('/invoice/list')) return 3;
+    return 3; // default to list
   };
 
-  const handleTabChange = (tab: string) => {
-    switch (tab) {
+  const handleTabChange = (tab: number) => {
+    const tabNames = ['create', 'edit', 'detail', 'list'];
+    const selectedTab = tabNames[tab];
+    
+    switch (selectedTab) {
       case 'create':
         router.push('/invoice/create');
         break;
@@ -48,12 +51,11 @@ const InvoiceTabs = () => {
     <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
       <Tabs 
         aria-label="Invoice navigation tabs" 
-        variant="underline"
         style="underline"
         onActiveTabChange={(tab) => handleTabChange(tab)}
       >
         <Tabs.Item
-          active={getActiveTab() === 'create'}
+          active={getActiveTab() === 0}
           title="Crear"
           icon={() => (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +65,7 @@ const InvoiceTabs = () => {
         />
         
         <Tabs.Item
-          active={getActiveTab() === 'edit'}
+          active={getActiveTab() === 1}
           title="Editar"
           icon={() => (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -74,7 +76,7 @@ const InvoiceTabs = () => {
         />
         
         <Tabs.Item
-          active={getActiveTab() === 'detail'}
+          active={getActiveTab() === 2}
           title="Detalle"
           icon={() => (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -85,7 +87,7 @@ const InvoiceTabs = () => {
         />
         
         <Tabs.Item
-          active={getActiveTab() === 'list'}
+          active={getActiveTab() === 3}
           title="Listado"
           icon={() => (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

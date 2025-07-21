@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 };
 
 const BCrumb = [
-    {
-        to: "/",
-        title: "Home",
-    },
-    {
-        title: "Invoice List",
-    },
+  {
+    to: "/",
+    title: "Home",
+  },
+  {
+    title: "Pagos L2",
+  },
 ];
 
 function List() {
@@ -25,7 +25,7 @@ function List() {
         <InvoiceProvider>
             <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <BreadcrumbComp title="Invoice List" items={BCrumb} />
+                    <BreadcrumbComp title="Pagos L2" items={BCrumb} />
                     <CardBox className="shadow-lg">
                         <InvoiceTabs />
                         <InvoiceList />
