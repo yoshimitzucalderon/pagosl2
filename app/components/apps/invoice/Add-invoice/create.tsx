@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Alert, Button, Label, Select, TextInput } from "flowbite-react";
 import { format, isValid, parseISO } from "date-fns";
 import Link from "next/link";
+import MediaUpload from "./MediaUpload";
 
 function CreateInvoice() {
   const { addInvoice, invoices } = useContext(InvoiceContext);
@@ -23,6 +24,14 @@ function CreateInvoice() {
     grandTotal: 0,
     subtotal: 0,
     date: new Date().toISOString().split('T')[0],
+  });
+  const [uploadMode, setUploadMode] = useState<'auto' | 'manual'>('auto');
+  const [manualForm, setManualForm] = useState({
+    fechaPago: '',
+    proveedor: '',
+    concepto: '',
+    moneda: '',
+    importe: '',
   });
 
   useEffect(() => {
@@ -82,6 +91,11 @@ function CreateInvoice() {
     });
   };
 
+  const handleManualChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setManualForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const invoiceData = {
@@ -131,6 +145,52 @@ function CreateInvoice() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Selector de modo de carga */}
+        <div className="flex gap-4 mb-4">
+          <button
+            type="button"
+            className={`px-4 py-2 rounded font-medium border transition-colors ${uploadMode === 'auto' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}`}
+            onClick={() => setUploadMode('auto')}
+          >
+            Cargar automáticamente
+          </button>
+          <button
+            type="button"
+            className={`px-4 py-2 rounded font-medium border transition-colors ${uploadMode === 'manual' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}`}
+            onClick={() => setUploadMode('manual')}
+          >
+            Cargar manualmente
+          </button>
+        </div>
+        {/* Render condicional */}
+        {uploadMode === 'auto' && (
+          <MediaUpload />
+        )}
+        {uploadMode === 'manual' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 rounded-lg p-6 border">
+            <div>
+              <label className="block text-sm font-medium mb-1">Fecha de pago:</label>
+              <input type="date" name="fechaPago" value={manualForm.fechaPago} onChange={handleManualChange} className="w-full rounded px-3 py-2 border border-gray-300" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Proveedor:</label>
+              <input type="text" name="proveedor" value={manualForm.proveedor} onChange={handleManualChange} className="w-full rounded px-3 py-2 border border-gray-300" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Concepto:</label>
+              <input type="text" name="concepto" value={manualForm.concepto} onChange={handleManualChange} className="w-full rounded px-3 py-2 border border-gray-300" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Moneda:</label>
+              <input type="text" name="moneda" value={manualForm.moneda} onChange={handleManualChange} className="w-full rounded px-3 py-2 border border-gray-300" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Importe neto pagado:</label>
+              <input type="number" name="importe" value={manualForm.importe} onChange={handleManualChange} className="w-full rounded px-3 py-2 border border-gray-300" />
+            </div>
+          </div>
+        )}
+
         {/* Agrupación de campos principales */}
         <div className="bg-gray-50 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-4 gap-4 border">
           <div className="md:col-span-2 flex flex-col gap-4">
