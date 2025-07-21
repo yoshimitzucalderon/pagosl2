@@ -1,12 +1,20 @@
 "use client";
 import React from 'react';
 import { LogOut } from 'lucide-react';
+import { useAuth } from '@/app/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const LogoutButton = () => {
-  const handleLogout = () => {
-    // Aquí puedes agregar la lógica de logout
-    console.log('Logout clicked');
-    // Por ejemplo: router.push('/auth/signin');
+  const { signOut } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push('/auth/signin');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (

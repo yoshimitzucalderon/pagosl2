@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useContext, useEffect } from "react";
 import { InvoiceContext } from "@/app/context/InvoiceContext";
+import { useAuth } from '@/app/context/AuthContext';
 import { Alert, Button, Label, Select, TextInput, Table, Tooltip } from "flowbite-react";
 
 import { useRouter } from "next/navigation";
@@ -8,6 +9,7 @@ import { format, isValid } from "date-fns";
 
 function CreateInvoice() {
   const { addInvoice, invoices } = useContext(InvoiceContext);
+  const { signOut } = useAuth();
   const [showAlert, setShowAlert] = useState(false);
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -133,6 +135,15 @@ function CreateInvoice() {
     setTimeout(() => {
       router.push('/invoice/list');
     }, 2000);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push('/auth/signin');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
@@ -306,7 +317,10 @@ function CreateInvoice() {
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-end">
+        <div className="flex justify-between">
+          <Button color="failure" onClick={handleLogout}>
+            Cerrar Sesión
+          </Button>
           <Button type="submit" color="primary">
             Create Invoice
           </Button>

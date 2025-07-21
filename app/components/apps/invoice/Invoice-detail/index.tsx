@@ -1,14 +1,26 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { InvoiceContext } from "@/app/context/InvoiceContext/index";
-import { usePathname } from "next/navigation";
+import { useAuth } from '@/app/context/AuthContext';
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Badge, Button, Table } from "flowbite-react";
 import { format, isValid, parseISO } from "date-fns";
 
 const InvoiceDetail = () => {
   const { invoices } = useContext(InvoiceContext);
+  const { signOut } = useAuth();
+  const router = useRouter();
   const [selectedInvoice, setSelectedInvoice]: any = useState(null);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push('/auth/signin');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   useEffect(() => {
     if (invoices.length > 0) {
@@ -119,9 +131,14 @@ const InvoiceDetail = () => {
         <Link href="/invoice/list">
           <Button color="gray">Back to List</Button>
         </Link>
-        <Link href={`/invoice/edit/${selectedInvoice.id}`}>
-          <Button color="primary">Edit Invoice</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href={`/invoice/edit/${selectedInvoice.id}`}>
+            <Button color="primary">Edit Invoice</Button>
+          </Link>
+          <Button color="failure" onClick={handleLogout}>
+            Cerrar Sesión
+          </Button>
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { InvoiceContext } from "@/app/context/InvoiceContext/index";
+import { useAuth } from '@/app/context/AuthContext';
 import {
   Checkbox,
   Table,
@@ -11,16 +12,27 @@ import {
   Tooltip,
 } from "flowbite-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { mutate } from "swr";
 
 function InvoiceList() {
   const { invoices, deleteInvoice } = useContext(InvoiceContext);
+  const { signOut } = useAuth();
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("All");
   const [selectedProducts, setSelectedProducts] = useState<any>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push('/auth/signin');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   // Filter invoices based on search term
   const filteredInvoices = invoices.filter(
@@ -219,6 +231,9 @@ function InvoiceList() {
           <Link href="/invoice/create">
             <Button color="primary" size="sm">New Invoice</Button>
           </Link>
+          <Button color="failure" onClick={handleLogout} size="sm">
+            Logout
+          </Button>
         </div>
       </div>
       <Table className="text-sm">
@@ -282,6 +297,17 @@ function InvoiceList() {
                        </svg>
                      </Button>
                    </Link>
+                   <Button 
+                     size="xs" 
+                     color="failure" 
+                     className="p-1"
+                     onClick={handleLogout}
+                     title="Cerrar Sesión"
+                   >
+                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                       <path d="M9 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H9M16 17L21 12L16 7M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                     </svg>
+                   </Button>
                  </div>
                </Table.Cell>
             </Table.Row>
