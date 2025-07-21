@@ -2,6 +2,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { InvoiceContext } from "@/app/context/InvoiceContext";
 import { useAuth } from '@/app/context/AuthContext';
+import LogoutConfirmModal from "@/app/components/shared/LogoutConfirmModal";
 import { Alert, Button, Label, Select, TextInput, Table, Tooltip } from "flowbite-react";
 
 import { useRouter } from "next/navigation";
@@ -11,6 +12,8 @@ function CreateInvoice() {
   const { addInvoice, invoices } = useContext(InvoiceContext);
   const { signOut } = useAuth();
   const [showAlert, setShowAlert] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const router = useRouter();
   const [formData, setFormData] = useState({
     id: 0,
@@ -137,12 +140,25 @@ function CreateInvoice() {
     }, 2000);
   };
 
-  const handleLogout = async () => {
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleLogoutConfirm = async () => {
+    setIsLoggingOut(true);
     try {
       await signOut();
       router.push('/auth/signin');
     } catch (error) {
       console.error('Error signing out:', error);
+      setIsLoggingOut(false);
+      setShowLogoutModal(false);
+    }
+  };
+
+  const handleLogoutCancel = () => {
+    if (!isLoggingOut) {
+      setShowLogoutModal(false);
     }
   };
 
@@ -318,7 +334,7 @@ function CreateInvoice() {
 
         {/* Submit Button */}
         <div className="flex justify-between">
-          <Button color="failure" onClick={handleLogout}>
+          <Button color="failure" onClick={handleLogoutClick}>
             Cerrar Sesión
           </Button>
           <Button type="submit" color="primary">
@@ -326,6 +342,13 @@ function CreateInvoice() {
           </Button>
         </div>
       </form>
+
+             <LogoutConfirmModal
+         isOpen={showLogoutModal}
+         onConfirm={handleLogoutConfirm}
+         onClose={handleLogoutCancel}
+         isLoggingOut={isLoggingOut}
+       />
     </div>
   );
 }

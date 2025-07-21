@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { InvoiceContext } from "@/app/context/InvoiceContext/index";
 import { useAuth } from '@/app/context/AuthContext';
+import LogoutConfirmModal from "@/app/components/shared/LogoutConfirmModal";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Badge, Button, Table } from "flowbite-react";
@@ -12,13 +13,28 @@ const InvoiceDetail = () => {
   const { signOut } = useAuth();
   const router = useRouter();
   const [selectedInvoice, setSelectedInvoice]: any = useState(null);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const handleLogout = async () => {
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleLogoutConfirm = async () => {
+    setIsLoggingOut(true);
     try {
       await signOut();
       router.push('/auth/signin');
     } catch (error) {
       console.error('Error signing out:', error);
+      setIsLoggingOut(false);
+      setShowLogoutModal(false);
+    }
+  };
+
+  const handleLogoutCancel = () => {
+    if (!isLoggingOut) {
+      setShowLogoutModal(false);
     }
   };
 
@@ -135,11 +151,18 @@ const InvoiceDetail = () => {
           <Link href={`/invoice/edit/${selectedInvoice.id}`}>
             <Button color="primary">Edit Invoice</Button>
           </Link>
-          <Button color="failure" onClick={handleLogout}>
+          <Button color="failure" onClick={handleLogoutClick}>
             Cerrar Sesión
           </Button>
         </div>
       </div>
+
+             <LogoutConfirmModal
+         isOpen={showLogoutModal}
+         onConfirm={handleLogoutConfirm}
+         onClose={handleLogoutCancel}
+         isLoggingOut={isLoggingOut}
+       />
     </>
   );
 };

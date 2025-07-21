@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { InvoiceContext } from "@/app/context/InvoiceContext/index";
 import { useAuth } from '@/app/context/AuthContext';
+import LogoutConfirmModal from "@/app/components/shared/LogoutConfirmModal";
 import {
   Checkbox,
   Table,
@@ -24,13 +25,28 @@ function InvoiceList() {
   const [selectedProducts, setSelectedProducts] = useState<any>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const handleLogout = async () => {
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleLogoutConfirm = async () => {
+    setIsLoggingOut(true);
     try {
       await signOut();
       router.push('/auth/signin');
     } catch (error) {
       console.error('Error signing out:', error);
+      setIsLoggingOut(false);
+      setShowLogoutModal(false);
+    }
+  };
+
+  const handleLogoutCancel = () => {
+    if (!isLoggingOut) {
+      setShowLogoutModal(false);
     }
   };
 
@@ -231,7 +247,7 @@ function InvoiceList() {
           <Link href="/invoice/create">
             <Button color="primary" size="sm">New Invoice</Button>
           </Link>
-          <Button color="failure" onClick={handleLogout} size="sm">
+          <Button color="failure" onClick={handleLogoutClick} size="sm">
             Logout
           </Button>
         </div>
@@ -301,7 +317,7 @@ function InvoiceList() {
                      size="xs" 
                      color="failure" 
                      className="p-1"
-                     onClick={handleLogout}
+                     onClick={handleLogoutClick}
                      title="Cerrar Sesión"
                    >
                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -330,6 +346,14 @@ function InvoiceList() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+             {/* Logout Confirmation Modal */}
+       <LogoutConfirmModal
+         isOpen={showLogoutModal}
+         onConfirm={handleLogoutConfirm}
+         onClose={handleLogoutCancel}
+         isLoggingOut={isLoggingOut}
+       />
     </div>
   );
 }
