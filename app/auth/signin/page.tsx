@@ -166,8 +166,9 @@ export default function SignInPage() {
             </div>
           )}
 
+          {/* Formulario */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
+            {/* Campo Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Correo Electrónico
@@ -181,21 +182,27 @@ export default function SignInPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors pr-20"
                   placeholder="Ingresa tu correo electrónico"
                 />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-1">
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <svg className="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <polyline points="22,6 12,13 2,6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <svg
+                      className="w-3 h-3 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline points="22,6 12,13 2,6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Password */}
+            {/* Campo Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                 Contraseña
@@ -209,10 +216,10 @@ export default function SignInPage() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors pr-20"
                   placeholder="Ingresa tu contraseña"
                 />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-1">
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
                     <svg
                       className="w-3 h-3 text-blue-600"
@@ -261,36 +268,34 @@ export default function SignInPage() {
               </div>
             </div>
 
-            {/* Remember Me and Forgot Password */}
+            {/* Remember me y Forgot password */}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
-                  id="remember-me"
+                  id="recordarme"
                   name="rememberMe"
                   type="checkbox"
                   checked={formData.rememberMe}
                   onChange={handleChange}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                <label htmlFor="recordarme" className="ml-2 block text-sm text-gray-600">
                   Recordarme
                 </label>
               </div>
-              <div className="text-sm">
-                <Link
-                  href="/auth/forgot-password"
-                  className="font-medium text-blue-600 hover:text-blue-500"
-                >
-                  ¿Olvidaste tu contraseña?
-                </Link>
-              </div>
+              <Link
+                href="/auth/forgot-password"
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
             </div>
 
             {/* Submit button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">
@@ -311,16 +316,16 @@ export default function SignInPage() {
                 href="/auth/signup"
                 className="font-medium text-blue-600 hover:text-blue-700"
               >
-                Crear una cuenta
+                Crear cuenta
               </Link>
             </p>
           </div>
         </div>
 
         {/* Panel de Bienvenida */}
-        <div className="hidden lg:flex bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-lg p-8 text-white flex-col justify-center">
+        <div className="hidden lg:flex bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-xl p-8 text-white flex-col justify-center">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
               <svg
                 className="w-10 h-10 text-white"
                 fill="none"
@@ -333,7 +338,7 @@ export default function SignInPage() {
                 <path d="M12 6v2m0 8v2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-white">Inicia sesión en tu cuenta</h2>
+            <h2 className="text-3xl font-bold mb-4 text-white">Inicia sesión en tu cuenta</h2>
             <h3 className="text-4xl font-bold mb-6 text-white">¡Bienvenido de vuelta!</h3>
             <p className="text-lg text-blue-100 leading-relaxed">
               Por favor inicia sesión en tu cuenta completando los campos necesarios a continuación
