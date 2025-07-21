@@ -12,6 +12,11 @@ const nextConfig = {
     config.resolve.alias['@'] = require('path').resolve(__dirname);
     return config;
   },
+  // Configuración para optimizar el build
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
 }
 
 module.exports = nextConfig 
