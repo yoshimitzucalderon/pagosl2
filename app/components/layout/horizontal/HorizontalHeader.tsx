@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Navbar } from "flowbite-react";
 import { Icon } from "@iconify/react";
 import { useAuth } from '@/app/context/AuthContext';
+import LogoutModal from './LogoutModal';
 
 interface HorizontalHeaderProps {
   isSticky: boolean;
@@ -13,12 +14,40 @@ interface HorizontalHeaderProps {
 export default function HorizontalHeader({ isSticky, user }: HorizontalHeaderProps) {
   const { signOut } = useAuth();
   const [mobileMenu, setMobileMenu] = useState("");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleMobileMenu = () => {
     if (mobileMenu === "active") {
       setMobileMenu("");
     } else {
       setMobileMenu("active");
+    }
+  };
+
+  const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      const result = await signOut();
+      if (result.error) {
+        console.error('Error al cerrar sesión:', result.error);
+        setIsLoggingOut(false);
+        setShowLogoutModal(false);
+      }
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      setIsLoggingOut(false);
+      setShowLogoutModal(false);
+    }
+  };
+
+  const closeLogoutModal = () => {
+    if (!isLoggingOut) {
+      setShowLogoutModal(false);
     }
   };
 
@@ -96,10 +125,16 @@ export default function HorizontalHeader({ isSticky, user }: HorizontalHeaderPro
                     </div>
                   </div>
                   <button
-                    onClick={signOut}
-                    className="h-8 w-8 hover:text-red-600 hover:bg-red-50 rounded-full flex justify-center items-center cursor-pointer text-gray-600"
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                    className="h-8 w-8 hover:text-red-600 hover:bg-red-50 rounded-full flex justify-center items-center cursor-pointer text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Cerrar Sesión"
                   >
-                    <Icon icon="solar:logout-2-line-duotone" width="16" />
+                    {isLoggingOut ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                    ) : (
+                      <Icon icon="solar:logout-2-line-duotone" width="16" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -129,16 +164,29 @@ export default function HorizontalHeader({ isSticky, user }: HorizontalHeaderPro
                 </div>
               </div>
               <button
-                onClick={signOut}
-                className="w-full flex items-center space-x-2 text-red-600 hover:bg-red-50 p-2 rounded-lg"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="w-full flex items-center space-x-2 text-red-600 hover:bg-red-50 p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Icon icon="solar:logout-2-line-duotone" width="16" />
-                <span>Cerrar Sesión</span>
+                {isLoggingOut ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                ) : (
+                  <Icon icon="solar:logout-2-line-duotone" width="16" />
+                )}
+                <span>{isLoggingOut ? 'Cerrando sesión...' : 'Cerrar Sesión'}</span>
               </button>
             </div>
           </div>
         </div>
       </header>
+
+      {/* Logout Modal */}
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onClose={closeLogoutModal}
+        onConfirm={confirmLogout}
+        isLoggingOut={isLoggingOut}
+      />
     </>
   );
 } 

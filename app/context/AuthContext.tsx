@@ -17,7 +17,7 @@ interface AuthContextType {
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<{ error: string | null }>;
-  signOut: () => Promise<void>;
+  signOut: () => Promise<{ error: string | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
 }
 
@@ -159,9 +159,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Función de cerrar sesión
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      console.log('🚪 AuthContext: Iniciando signOut');
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        console.error('❌ AuthContext: Error al cerrar sesión:', error);
+        return { error: error.message };
+      }
+      
+      console.log('✅ AuthContext: Sesión cerrada exitosamente');
+      setUser(null);
+      
+      // Redirigir al usuario a la página de login
+      router.push('/auth/signin');
+      
+      return { error: null };
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('❌ AuthContext: Error inesperado al cerrar sesión:', error);
+      return { error: 'Error inesperado al cerrar sesión' };
     }
   };
 
