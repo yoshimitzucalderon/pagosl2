@@ -222,10 +222,11 @@ function CreateInvoice() {
                       <button
                         type="button"
                         onClick={handleAddItem}
-                        className="bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full p-2 flex items-center justify-center"
+                        className="bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full p-1 flex items-center justify-center w-4 h-4"
+                        style={{ minWidth: '16px', minHeight: '16px' }}
                         title="Add Item"
                       >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M12 4V20M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </button>
