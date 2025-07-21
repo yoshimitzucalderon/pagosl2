@@ -4,7 +4,12 @@ import { FileInput, Label } from "flowbite-react";
 import React from "react";
 import { Icon } from "@iconify/react";
 
-const MediaUpload = () => {
+const MediaUpload = ({ onFileUpload }: { onFileUpload?: (file: File) => void }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0] && onFileUpload) {
+      onFileUpload(e.target.files[0]);
+    }
+  };
   return (
     <CardBox>
       <h5 className="card-title mb-4">Media</h5>
@@ -26,7 +31,7 @@ const MediaUpload = () => {
               (Tamaño máximo: 10 MB)
             </p>
           </div>
-          <FileInput id="dropzone-file" className="hidden" />
+          <FileInput id="dropzone-file" className="hidden" onChange={handleChange} />
         </Label>
       </div>
     </CardBox>

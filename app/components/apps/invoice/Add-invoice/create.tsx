@@ -33,6 +33,8 @@ function CreateInvoice() {
     moneda: '',
     importe: '',
   });
+  const [n8nLoading, setN8nLoading] = useState(false);
+  const [n8nMessage, setN8nMessage] = useState("");
 
   useEffect(() => {
     if (invoices.length > 0) {
@@ -94,6 +96,29 @@ function CreateInvoice() {
   const handleManualChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setManualForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Simula el envío a n8n y la respuesta
+  const handleMediaUpload = async (file: File) => {
+    setN8nLoading(true);
+    setN8nMessage("");
+    // Aquí iría tu llamada real a n8n
+    // const response = await fetch('https://tu-n8n-webhook', { ... });
+    // const data = await response.json();
+
+    // Simulación de respuesta de n8n:
+    setTimeout(() => {
+      setManualForm({
+        fechaPago: '2024-06-01',
+        proveedor: 'Proveedor S.A.',
+        concepto: 'Pago de servicios',
+        moneda: 'MXN',
+        importe: '1234.56',
+      });
+      setUploadMode('manual');
+      setN8nLoading(false);
+      setN8nMessage('Revisa y corrige los datos extraídos antes de guardar.');
+    }, 2000);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
@@ -163,8 +188,14 @@ function CreateInvoice() {
           </button>
         </div>
         {/* Render condicional */}
+        {n8nLoading && <p className="text-blue-600">Procesando imagen...</p>}
+        {n8nMessage && (
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-4 text-yellow-800 rounded">
+            {n8nMessage}
+          </div>
+        )}
         {uploadMode === 'auto' && (
-          <MediaUpload />
+          <MediaUpload onFileUpload={handleMediaUpload} />
         )}
         {uploadMode === 'manual' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 rounded-lg p-6 border">
