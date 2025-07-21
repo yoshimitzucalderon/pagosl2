@@ -144,16 +144,19 @@ const InvoiceDetail = () => {
       </div>
 
       <div className="flex justify-between mt-8">
-        <Link href="/invoice/list">
-          <Button color="gray">Back to List</Button>
+        <Link href="/invoice/list" className="flex items-center gap-1 text-gray-500 hover:text-blue-600 px-4 py-2 rounded transition-colors border border-gray-200 bg-white font-medium">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M15 19l-7-7 7-7" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <span>Volver a la lista</span>
         </Link>
         <div className="flex gap-2">
-          <Link href={`/invoice/edit/${selectedInvoice.id}`}>
-            <Button color="primary">Edit Invoice</Button>
+          <Link href={`/invoice/edit/${selectedInvoice.id}`} className="flex items-center gap-1 text-gray-500 hover:text-blue-600 px-4 py-2 rounded transition-colors border border-gray-200 bg-white font-medium">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M3 17.25V21h3.75l11.06-11.06a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.76 3.76 1.83-1.83z" fill="#94a3b8"/></svg>
+            <span>Editar</span>
           </Link>
-          <Button color="failure" onClick={handleLogoutClick}>
-            Cerrar Sesión
-          </Button>
+          <button onClick={handleLogoutClick} className="flex items-center gap-1 text-red-500 hover:text-white px-4 py-2 rounded transition-colors border border-red-200 bg-red-50 font-medium hover:bg-red-500">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M16 17l5-5-5-5M21 12H9M13 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span>Cerrar Sesión</span>
+          </button>
         </div>
       </div>
 

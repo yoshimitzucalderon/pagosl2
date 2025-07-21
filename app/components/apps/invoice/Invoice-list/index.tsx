@@ -305,13 +305,9 @@ function InvoiceList() {
                        </svg>
                      </Button>
                    </Link>
-                   <Link href={`/invoice/edit/${invoice.id}`}>
-                     <Button size="xs" color="gray" className="p-1">
-                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <path d="M11 4H4A2 2 0 0 0 2 6V20A2 2 0 0 0 4 22H18A2 2 0 0 0 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                         <path d="M18.5 2.5A2.121 2.121 0 0 1 21 5L11 15H8V12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                       </svg>
-                     </Button>
+                   <Link href={`/invoice/edit/${invoice.id}`} className="flex items-center gap-1 text-gray-500 hover:text-blue-600 px-2 py-1 rounded transition-colors">
+                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M3 17.25V21h3.75l11.06-11.06a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.76 3.76 1.83-1.83z" fill="#94a3b8"/></svg>
+                     <span>Editar</span>
                    </Link>
                    <Button 
                      size="xs" 

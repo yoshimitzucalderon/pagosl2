@@ -1,7 +1,45 @@
 "use client";
 import React from 'react';
-import { Tabs } from "flowbite-react";
 import { useRouter, usePathname } from 'next/navigation';
+
+const tabData = [
+  {
+    key: 0,
+    label: 'Crear',
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M12 2V22M2 12H22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    ),
+    path: '/invoice/create',
+    match: '/invoice/create',
+  },
+  {
+    key: 1,
+    label: 'Editar',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M3 17.25V21h3.75l11.06-11.06a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.76 3.76 1.83-1.83z" fill="currentColor"/></svg>
+    ),
+    path: '/invoice/edit',
+    match: '/invoice/edit',
+  },
+  {
+    key: 2,
+    label: 'Detalle',
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    ),
+    path: '/invoice/detail',
+    match: '/invoice/detail',
+  },
+  {
+    key: 3,
+    label: 'Listado',
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M3 7H21M3 12H21M3 17H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    ),
+    path: '/invoice/list',
+    match: '/invoice/list',
+  },
+];
 
 const InvoiceTabs = () => {
   const router = useRouter();
@@ -15,87 +53,48 @@ const InvoiceTabs = () => {
     return 3; // default to list
   };
 
-  const handleTabChange = (tab: number) => {
-    const tabNames = ['create', 'edit', 'detail', 'list'];
-    const selectedTab = tabNames[tab];
-    
-    switch (selectedTab) {
-      case 'create':
-        router.push('/invoice/create');
-        break;
-      case 'edit':
-        // Si estamos en una página de edición específica, mantenemos la URL
-        if (pathname.includes('/invoice/edit/')) {
-          return; // No navegamos, ya estamos en la página correcta
-        }
-        // Si no, redirigimos a la lista donde pueden seleccionar qué editar
-        router.push('/invoice/list');
-        break;
-      case 'detail':
-        // Si estamos en una página de detalle específica, mantenemos la URL
-        if (pathname.includes('/invoice/detail/')) {
-          return; // No navegamos, ya estamos en la página correcta
-        }
-        // Si no, redirigimos a la lista donde pueden seleccionar qué ver
-        router.push('/invoice/list');
-        break;
-      case 'list':
-        router.push('/invoice/list');
-        break;
-      default:
-        router.push('/invoice/list');
+  const handleTabClick = (tab) => {
+    const tabObj = tabData[tab];
+    if (tabObj) {
+      if (tabObj.key === 1 && pathname.includes('/invoice/edit/')) {
+        // Ya estamos en la edición específica
+        return;
+      }
+      if (tabObj.key === 2 && pathname.includes('/invoice/detail/')) {
+        return;
+      }
+      router.push(tabObj.path);
     }
   };
 
+  const activeTab = getActiveTab();
+
   return (
-    <div className="border-b border-gray-200 dark:border-gray-700 mb-6 mt-8">
-      <Tabs 
-        aria-label="Invoice navigation tabs" 
-        style="underline"
-        onActiveTabChange={(tab) => handleTabChange(tab)}
-      >
-        <Tabs.Item
-          active={getActiveTab() === 0}
-          title="Crear"
-          icon={() => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2V22M2 12H22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          )}
-        />
-        
-        <Tabs.Item
-          active={getActiveTab() === 1}
-          title="Editar"
-          icon={() => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M11 4H4A2 2 0 0 0 2 6V20A2 2 0 0 0 4 22H18A2 2 0 0 0 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M18.5 2.5A2.121 2.121 0 0 1 21 5L11 15H8V12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          )}
-        />
-        
-        <Tabs.Item
-          active={getActiveTab() === 2}
-          title="Detalle"
-          icon={() => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          )}
-        />
-        
-        <Tabs.Item
-          active={getActiveTab() === 3}
-          title="Listado"
-          icon={() => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 7H21M3 12H21M3 17H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          )}
-        />
-      </Tabs>
+    <div className="mb-6 mt-0">
+      <nav className="flex space-x-6">
+        {tabData.map((tab, idx) => {
+          const isActive = activeTab === idx;
+          return (
+            <button
+              key={tab.key}
+              type="button"
+              onClick={() => handleTabClick(idx)}
+              className={`flex items-center gap-2 px-0 py-2 text-base font-medium transition-colors relative bg-transparent border-none outline-none
+                ${isActive ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}
+              `}
+              style={{ minHeight: '40px', background: 'none' }}
+            >
+              <span className="flex items-center gap-2">
+                {React.cloneElement(tab.icon, { color: isActive ? '#2563eb' : '#94a3b8' })}
+                {tab.label}
+              </span>
+              {isActive && (
+                <span className="absolute left-0 right-0 -bottom-1 h-0.5 bg-blue-500 rounded transition-all" style={{width:'100%'}}></span>
+              )}
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 };

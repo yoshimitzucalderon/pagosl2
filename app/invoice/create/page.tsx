@@ -18,7 +18,7 @@ const BCrumb = [
   },
   {
     to: "/invoice/create",
-    title: "Invoice Create",
+    title: "Crear registro L2",
   },
 ];
 
@@ -28,7 +28,7 @@ function CreateList() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <LogoutButton />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <BreadcrumbComp title=" Create A New Invoice " items={BCrumb} />
+          <BreadcrumbComp items={BCrumb} />
           <CardBox className="shadow-lg">
             <InvoiceTabs />
             <CreateInvoiceApp />

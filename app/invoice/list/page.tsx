@@ -18,7 +18,7 @@ const BCrumb = [
   },
   {
     to: "/invoice/list",
-    title: "Pagos L2",
+    title: "Listado pagos L2",
   },
 ];
 
