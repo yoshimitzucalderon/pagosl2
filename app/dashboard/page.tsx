@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from '@/app/context/AuthContext';
-import DashboardLayout from '@/app/components/layout/DashboardLayout';
+import HorizontalLayout from '@/app/components/layout/HorizontalLayout';
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 
@@ -300,7 +300,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <DashboardLayout>
+    <HorizontalLayout>
       <div className="p-6">
         {/* Tab Navigation */}
         <div className="mb-6">
@@ -331,6 +331,6 @@ export default function DashboardPage() {
         {/* Content */}
         {renderContent()}
       </div>
-    </DashboardLayout>
+    </HorizontalLayout>
   );
 } 
