@@ -97,10 +97,10 @@ export async function middleware(req) {
       return NextResponse.redirect(redirectUrl)
     }
 
-    // Si hay sesión y está en rutas de autenticación, redirigir a dashboard
+    // Si hay sesión y está en rutas de autenticación, redirigir a crear invoice
     if (session && isPublicRoute) {
       const redirectUrl = req.nextUrl.clone()
-      redirectUrl.pathname = '/dashboard'
+      redirectUrl.pathname = '/invoice/create'
       return NextResponse.redirect(redirectUrl)
     }
 

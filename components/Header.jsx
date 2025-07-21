@@ -28,8 +28,8 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <a href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Panel Principal
+            <a href="/invoice/create" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Crear Invoice
             </a>
             <a href="/upload" className="text-gray-600 hover:text-gray-900 transition-colors">
               Subir Archivo
@@ -72,11 +72,11 @@ export default function Header() {
           <div className="md:hidden py-4 border-t border-gray-200">
             <nav className="flex flex-col space-y-4">
               <a 
-                href="/dashboard" 
+                href="/invoice/create" 
                 className="text-gray-600 hover:text-gray-900 transition-colors px-4 py-2 rounded-lg hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Panel Principal
+                Crear Invoice
               </a>
               <a 
                 href="/upload" 

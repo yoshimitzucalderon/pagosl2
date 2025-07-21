@@ -48,8 +48,8 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
 
         if (event === 'SIGNED_IN') {
-          // Redirigir a dashboard después del login
-          router.push('/');
+          // Redirigir a crear invoice después del login
+          router.push('/invoice/create');
         } else if (event === 'SIGNED_OUT') {
           // Redirigir a login después del logout
           router.push('/auth/signin');

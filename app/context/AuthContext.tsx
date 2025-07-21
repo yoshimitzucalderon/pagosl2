@@ -96,7 +96,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.log('👤 AuthContext: Estableciendo usuario:', userData);
           setUser(userData);
           console.log('✅ AuthContext: Usuario establecido en estado');
-          // NO redirigir automáticamente - dejar que el usuario decida
+          // Redirigir automáticamente a crear invoice después del login
+          console.log('🚀 AuthContext: Redirigiendo a /invoice/create');
+          router.push('/invoice/create');
         } else if (event === 'SIGNED_OUT') {
           console.log('🚪 AuthContext: Usuario cerrado');
           setUser(null);

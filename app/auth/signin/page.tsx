@@ -63,11 +63,11 @@ export default function SignInPage() {
             onClick={() => {
               console.log('🚀 SignInPage: Botón manual clickeado');
               console.log('📍 SignInPage: URL actual:', window.location.href);
-              window.location.href = '/dashboard';
+              window.location.href = '/invoice/create';
             }}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
           >
-            Ir al Dashboard
+            Ir a Crear Invoice
           </button>
           
           <p className="text-sm text-gray-500 mt-2">
@@ -116,7 +116,7 @@ export default function SignInPage() {
         // Redirección manual como respaldo
         setTimeout(() => {
           console.log('🚀 SignIn: Ejecutando redirección manual...');
-          window.location.href = '/dashboard';
+          window.location.href = '/invoice/create';
         }, 2000);
       }
     } catch (error) {
