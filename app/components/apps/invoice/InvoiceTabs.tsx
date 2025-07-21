@@ -48,7 +48,7 @@ const InvoiceTabs = () => {
   };
 
   return (
-    <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
+    <div className="border-b border-gray-200 dark:border-gray-700 mb-6 mt-8">
       <Tabs 
         aria-label="Invoice navigation tabs" 
         style="underline"

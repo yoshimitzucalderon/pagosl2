@@ -7,7 +7,7 @@ interface BreadcrumbItem {
 }
 
 interface BreadcrumbCompProps {
-  title: string;
+  title?: string;
   items: BreadcrumbItem[];
 }
 
@@ -36,9 +36,11 @@ const BreadcrumbComp: React.FC<BreadcrumbCompProps> = ({ title, items }) => {
           ))}
         </ol>
       </nav>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
-        {title}
-      </h1>
+      {title && (
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+          {title}
+        </h1>
+      )}
     </div>
   );
 };
