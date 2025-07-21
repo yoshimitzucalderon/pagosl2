@@ -6,6 +6,7 @@ import { Alert, Button, Label, Select, TextInput } from "flowbite-react";
 import { format, isValid, parseISO } from "date-fns";
 import Link from "next/link";
 import MediaUpload from "./MediaUpload";
+import { RotateCcw } from "lucide-react";
 
 function CreateInvoice() {
   const { addInvoice, invoices } = useContext(InvoiceContext);
@@ -32,6 +33,7 @@ function CreateInvoice() {
     concepto: '',
     moneda: '',
     importe: '',
+    notas: '', // nuevo campo
   });
   const [n8nLoading, setN8nLoading] = useState(false);
   const [n8nMessage, setN8nMessage] = useState("");
@@ -114,6 +116,7 @@ function CreateInvoice() {
         concepto: 'Pago de servicios',
         moneda: 'MXN',
         importe: '1234.56',
+        notas: '', // incluir notas vacío
       });
       setUploadMode('manual');
       setN8nLoading(false);
@@ -152,6 +155,21 @@ function CreateInvoice() {
     ? format(isValid(parseISO(formData.date)) ? parseISO(formData.date) : new Date(), 'EEEE, MMMM dd, yyyy')
     : format(new Date(), 'EEEE, MMMM dd, yyyy');
 
+  // función para resetear el formulario manual
+  const handleReset = () => {
+    setManualForm({
+      fechaPago: '',
+      proveedor: '',
+      concepto: '',
+      moneda: '',
+      importe: '',
+      notas: '', // incluir notas vacío
+    });
+  };
+
+  // función para saber si algún campo tiene valor
+  const isManualFormFilled = Object.values(manualForm).some((v) => v && v.toString().trim() !== '');
+
   return (
     <div className="space-y-6">
       {showAlert && (
@@ -162,7 +180,7 @@ function CreateInvoice() {
 
       {/* Header Section */}
       <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-1">Add New Invoice Details</h2>
+        <h2 className="text-2xl font-bold mb-1">Agregar nuevo pago L2</h2>
         <div className="text-gray-500 text-sm mb-2 flex flex-wrap gap-4">
           <span>ID: {formData.id}</span>
           <span>Date: {formattedDate}</span>
@@ -219,29 +237,31 @@ function CreateInvoice() {
               <label className="block text-sm font-medium mb-1">Importe neto pagado:</label>
               <input type="number" name="importe" value={manualForm.importe} onChange={handleManualChange} className="w-full rounded px-3 py-2 border border-gray-300" />
             </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Notas:</label>
+              <input type="text" name="notas" value={manualForm.notas} onChange={handleManualChange} className="w-full rounded px-3 py-2 border border-gray-300" />
+            </div>
           </div>
         )}
 
         {/* Botones */}
         <div className="flex flex-wrap gap-4 justify-end mt-8">
-          <Link href="/invoice/list" className="flex items-center gap-1 text-gray-500 hover:text-blue-600 px-2 py-1 rounded transition-colors border border-gray-200 bg-white font-medium text-sm">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M15 19l-7-7 7-7" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            <span>Volver a la lista</span>
-          </Link>
           <button
             type="submit"
-            className="flex items-center gap-1 text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded transition-colors font-medium text-sm"
+            className="flex items-center gap-1 text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!isManualFormFilled}
           >
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M12 5v14m7-7H5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            <span>Crear Invoice</span>
+            <span>Agregar pago</span>
           </button>
           <button
             type="button"
-            className="flex items-center gap-1 text-pink-600 hover:text-white px-3 py-1 rounded transition-colors border border-pink-200 bg-pink-50 font-medium hover:bg-pink-500 text-sm"
-            onClick={handleCancel}
+            className="flex items-center gap-1 text-pink-600 hover:text-white px-3 py-1 rounded transition-colors border border-pink-200 bg-pink-50 font-medium hover:bg-pink-500 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleReset}
+            disabled={!isManualFormFilled}
           >
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M18 6L6 18M6 6l12 12" stroke="#ec4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            <span>Cancelar</span>
+            <RotateCcw size={14} className="inline-block align-middle" />
+            <span>Resetear</span>
           </button>
         </div>
       </form>
