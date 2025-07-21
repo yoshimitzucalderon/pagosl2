@@ -2,6 +2,15 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 
 export async function middleware(req) {
+  // TEMPORALMENTE DESHABILITADO PARA EVITAR LOOP INFINITO
+  console.log('🔄 Middleware: Deshabilitado temporalmente');
+  return NextResponse.next({
+    request: {
+      headers: req.headers,
+    },
+  });
+
+  /*
   let response = NextResponse.next({
     request: {
       headers: req.headers,
@@ -101,6 +110,7 @@ export async function middleware(req) {
     // En caso de error, permitir el acceso sin autenticación
     return response
   }
+  */
 }
 
 export const config = {

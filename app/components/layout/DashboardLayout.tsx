@@ -1,43 +1,45 @@
 "use client";
-import React, { useContext } from "react";
-import Sidebar from "../sidebar/Sidebar";
-import Header from "../header/Header";
-import MobileSidebar from "../sidebar/MobileSidebar";
-import { CustomizerContext } from "@/app/context/CustomizerContext";
+
+import React, { useState } from 'react';
+import Sidebar from '../sidebar/Sidebar';
+import Header from '../sidebar/Header';
+import { useAuth } from '@/app/context/AuthContext';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const { isCollapse } = useContext(CustomizerContext);
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   return (
-    <div className="flex w-full min-h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="hidden xl:block">
-        <Sidebar />
-      </div>
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <Header />
+        <Header 
+          onMenuClick={() => setSidebarOpen(true)} 
+          user={user}
+          onSignOut={handleSignOut}
+        />
 
-        {/* Mobile Sidebar */}
-        <MobileSidebar />
-
-        {/* Body Content */}
-        <main
-          className={`flex-1 p-6 transition-all duration-300 ease-in-out ${
-            isCollapse === "mini-sidebar" ? "xl:ml-16" : "xl:ml-64"
-          }`}
-        >
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
           {children}
         </main>
       </div>
     </div>
   );
-};
-
-export default DashboardLayout; 
+} 
