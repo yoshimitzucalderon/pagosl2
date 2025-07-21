@@ -362,10 +362,10 @@
 
   /* Headlessui */
   .ui-button{
-    @apply flex items-stretch justify-between text-center py-2.5 px-5 text-white text-center font-medium rounded-full 
+    @apply flex items-stretch justify-between py-2.5 px-5 text-white font-medium rounded-full text-center
   }
   .ui-button-small{
-    @apply flex items-stretch justify-between text-center py-2 px-6 text-white text-center font-medium rounded-full 
+    @apply flex items-stretch justify-between py-2 px-6 text-white font-medium rounded-full text-center
   }
   .ui-dropdown {
     @apply w-full !max-w-56 bg-white shadow-md text-start rounded-sm py-3;

@@ -414,7 +414,7 @@ export default function SignUpPage() {
         </div>
 
         {/* Panel de Bienvenida */}
-        <div className="hidden lg:flex bg-blue-600 rounded-2xl shadow-xl p-8 text-white flex-col justify-center">
+        <div className="hidden lg:flex bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-xl p-8 text-white flex-col justify-center">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
               <svg
