@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Alert, Button, Label, Select, TextInput } from "flowbite-react";
 import { format, isValid, parseISO } from "date-fns";
 import Link from "next/link";
-import MediaUpload from "./MediaUpload";
+import UploadForm from "../../../../../components/UploadForm";
 import { RotateCcw } from "lucide-react";
 
 function CreateInvoice() {
@@ -100,28 +100,28 @@ function CreateInvoice() {
     setManualForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Simula el envío a n8n y la respuesta
-  const handleMediaUpload = async (file: File) => {
-    setN8nLoading(true);
+  // Maneja los datos procesados por n8n
+  const handleMediaUpload = async (ocrData: any) => {
+    setN8nLoading(false);
     setN8nMessage("");
-    // Aquí iría tu llamada real a n8n
-    // const response = await fetch('https://tu-n8n-webhook', { ... });
-    // const data = await response.json();
-
-    // Simulación de respuesta de n8n:
-    setTimeout(() => {
-      setManualForm({
-        fechaPago: '2024-06-01',
-        proveedor: 'Proveedor S.A.',
-        concepto: 'Pago de servicios',
-        moneda: 'MXN',
-        importe: '1234.56',
-        notas: '', // incluir notas vacío
-      });
-      setUploadMode('manual');
-      setN8nLoading(false);
-      setN8nMessage('Revisa y corrige los datos extraídos antes de guardar.');
-    }, 2000);
+    
+    // Mapear datos de OCR a formulario manual
+    setManualForm({
+      fechaPago: ocrData.fecha_de_pago_proceso_l2 || '',
+      proveedor: ocrData.proveedor_proceso_l2 || '',
+      concepto: ocrData.concepto_proceso_l2 || '',
+      moneda: ocrData.moneda_proceso_l2 || 'MXN',
+      importe: ocrData.pagado_proceso_l2 || '',
+      notas: ocrData.notas_proceso_l2 || '',
+    });
+    
+    setUploadMode('manual');
+    setN8nMessage('Revisa y corrige los datos extraídos antes de guardar.');
+    
+    // Mostrar información de duplicados si existe
+    if (ocrData.isDuplicate) {
+      setN8nMessage('⚠️ Se encontraron pagos similares. Revisa los datos antes de guardar.');
+    }
   };
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
@@ -213,7 +213,7 @@ function CreateInvoice() {
           </div>
         )}
         {uploadMode === 'auto' && (
-          <MediaUpload onFileUpload={handleMediaUpload} />
+          <UploadForm onProcessed={handleMediaUpload} onCancel={() => setUploadMode('manual')} />
         )}
         {uploadMode === 'manual' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 rounded-lg p-6 border">

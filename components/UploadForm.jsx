@@ -1,231 +1,292 @@
-'use client';
-
+// components/UploadForm.jsx - Ultra-simplificado, todo el procesamiento en n8n
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useAuth } from './auth/AuthProvider';
-import { uploadDocument } from '../lib/api';
-import { Upload, File, X, CheckCircle, AlertCircle } from 'lucide-react';
-import { formatFileSize } from '../utils/formatters';
+import { processDocument, checkDuplicatePayment } from '../lib/api';
+import { 
+  validateImageFile, 
+  getFileType, 
+  formatFileSize, 
+  detectDocumentType,
+  getFormatDescription,
+  needsSpecialProcessing,
+  getProcessingInfo
+} from '../utils/imageValidation';
+import { 
+  DocumentIcon, 
+  PhotoIcon, 
+  ArrowPathIcon, 
+  DevicePhoneMobileIcon,
+  CloudArrowUpIcon,
+  CheckCircleIcon 
+} from '@heroicons/react/24/outline';
 
-export default function UploadForm({ onSuccess, onError }) {
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const { user } = useAuth();
+const UploadForm = ({ onProcessed, onCancel }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState(null);
+  const [processingStep, setProcessingStep] = useState('');
 
-  const onDrop = useCallback((acceptedFiles) => {
+  // Obtener ícono según tipo de archivo (expandido)
+  const getFileIcon = (file) => {
+    const fileType = getFileType(file);
+    switch (fileType) {
+      case 'pdf':
+        return <DocumentIcon className="h-6 w-6 text-red-600" />;
+      case 'heic':
+        return <DevicePhoneMobileIcon className="h-6 w-6 text-blue-600" />;
+      case 'tiff':
+        return <PhotoIcon className="h-6 w-6 text-purple-600" />;
+      case 'gif':
+        return <PhotoIcon className="h-6 w-6 text-yellow-600" />;
+      case 'svg':
+        return <PhotoIcon className="h-6 w-6 text-indigo-600" />;
+      case 'avif':
+        return <PhotoIcon className="h-6 w-6 text-cyan-600" />;
+      case 'webm':
+        return <PhotoIcon className="h-6 w-6 text-orange-600" />;
+      case 'image':
+        return <PhotoIcon className="h-6 w-6 text-green-600" />;
+      default:
+        return <DocumentIcon className="h-6 w-6 text-gray-600" />;
+    }
+  };
+
+  // Obtener descripción del tipo de archivo (simplificado)
+  const getFileDescription = (file) => {
+    return getFormatDescription(file);
+  };
+
+  // Manejar archivos soltados
+  const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
-    if (file) {
-      setUploadedFile(file);
-      setUploadProgress(0);
+    if (!file) return;
+
+    setError(null);
+    setSelectedFile(null);
+
+    try {
+      // Validar archivo
+      validateImageFile(file);
+      
+      // Mostrar archivo seleccionado
+      setSelectedFile(file);
+      
+      console.log('📄 Archivo seleccionado:', {
+        name: file.name,
+        size: formatFileSize(file.size),
+        type: file.type,
+        needsSpecialProcessing: needsSpecialProcessing(file),
+        isDocument: detectDocumentType(file)
+      });
+      
+    } catch (error) {
+      setError(error.message);
     }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
+  // Configuración del dropzone (TODOS LOS FORMATOS)
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'application/pdf': ['.pdf'],
-      'image/jpeg': ['.jpg', '.jpeg'],
-      'image/png': ['.png']
+      'image/*': [
+        '.jpeg', '.jpg', '.png', '.webp', '.gif', '.bmp', 
+        '.tiff', '.tif', '.heic', '.heif', '.avif', '.jxl', 
+        '.svg', '.ico', '.webm'
+      ],
+      'application/pdf': ['.pdf']
     },
     maxFiles: 1,
-    maxSize: 10 * 1024 * 1024, // 10MB
+    maxSize: 25 * 1024 * 1024 // 25MB para TIFFs grandes
   });
 
-  const handleUpload = async () => {
-    if (!uploadedFile) return;
+  // Procesar documento con OCR
+  const handleProcess = async () => {
+    if (!selectedFile) return;
+
+    setIsProcessing(true);
+    setError(null);
+    setProcessingStep('Subiendo archivo...');
 
     try {
-      setUploading(true);
-      setUploadProgress(0);
+      console.log('📤 Enviando archivo a n8n para procesamiento completo:', {
+        name: selectedFile.name,
+        size: formatFileSize(selectedFile.size),
+        type: selectedFile.type
+      });
 
-      // Simular progreso de upload
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
-          }
-          return prev + 10;
-        });
-      }, 200);
+      // Actualizar paso según tipo de archivo
+      const processingSteps = getProcessingInfo(selectedFile);
+      if (processingSteps.length > 1) {
+        setProcessingStep(processingSteps[0] + '...');
+      } else {
+        setProcessingStep('Procesando con OCR...');
+      }
 
-      const result = await uploadDocument(uploadedFile, user);
-      
-      clearInterval(progressInterval);
-      setUploadProgress(100);
+      // Enviar a n8n (manejará conversión + compresión + OCR)
+      const response = await processDocument(selectedFile);
+      const ocrData = await response.json();
 
-      // Simular delay para mostrar progreso completo
-      setTimeout(() => {
-        onSuccess(result);
-      }, 500);
+      if (ocrData.error) {
+        setError('Error procesando documento: ' + ocrData.error);
+        return;
+      }
+
+      setProcessingStep('Verificando duplicados...');
+
+      // Verificar duplicados si tenemos datos básicos
+      if (ocrData.proveedor_proceso_l2 && ocrData.concepto_proceso_l2) {
+        const duplicateCheck = await checkDuplicatePayment(
+          ocrData.concepto_proceso_l2,
+          ocrData.pagado_proceso_l2,
+          ocrData.fecha_de_pago_proceso_l2,
+          ocrData.proveedor_proceso_l2
+        );
+
+        ocrData.duplicates = duplicateCheck.duplicates;
+        ocrData.isDuplicate = duplicateCheck.isDuplicate;
+      }
+
+      console.log('✅ Procesamiento completado:', {
+        extractedFields: Object.keys(ocrData).filter(key => ocrData[key]),
+        processingStats: ocrData.processing_stats,
+        hasDuplicates: ocrData.isDuplicate
+      });
+
+      // Pasar datos procesados al componente padre
+      onProcessed(ocrData);
 
     } catch (error) {
-      console.error('Error en upload:', error);
-      onError(error.message || 'Error al procesar el documento');
+      setError('Error procesando archivo: ' + error.message);
     } finally {
-      setUploading(false);
+      setIsProcessing(false);
+      setProcessingStep('');
     }
   };
 
-  const removeFile = () => {
-    setUploadedFile(null);
-    setUploadProgress(0);
-  };
-
-  const fileRejectionItems = fileRejections.map(({ file, errors }) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-      <ul>
-        {errors.map(e => (
-          <li key={e.code}>{e.message}</li>
-        ))}
-      </ul>
-    </li>
-  ));
-
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="card">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            📄 Subir Documento
-          </h2>
-          <p className="text-gray-600">
-            Sube un PDF o imagen para procesamiento automático con OCR
-          </p>
-        </div>
+    <div className="max-w-2xl mx-auto space-y-6">
 
-        {/* Zona de drop */}
+
+      {/* Dropzone */}
+      {!selectedFile && (
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-            isDragActive
-              ? 'border-primary-400 bg-primary-50'
-              : uploadedFile
-              ? 'border-green-400 bg-green-50'
-              : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
+          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 ${
+            isDragActive 
+              ? 'border-blue-500 bg-blue-50' 
+              : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
           }`}
         >
           <input {...getInputProps()} />
-          
-          {uploadedFile ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-center">
-                <CheckCircle className="h-12 w-12 text-green-500" />
-              </div>
-              <div>
-                <p className="text-lg font-medium text-gray-900">
-                  Archivo seleccionado
-                </p>
-                <p className="text-sm text-gray-600">
-                  {uploadedFile.name} ({formatFileSize(uploadedFile.size)})
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeFile();
-                }}
-                className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-              >
-                <X className="h-4 w-4 mr-1" />
-                Cambiar archivo
-              </button>
-            </div>
+          <CloudArrowUpIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          {isDragActive ? (
+            <p className="text-blue-600 font-medium">Suelta el archivo aquí...</p>
           ) : (
-            <div className="space-y-4">
-              <div className="flex items-center justify-center">
-                <Upload className="h-12 w-12 text-gray-400" />
-              </div>
-              <div>
-                <p className="text-lg font-medium text-gray-900">
-                  {isDragActive ? 'Suelta el archivo aquí' : 'Arrastra y suelta un archivo aquí'}
-                </p>
-                <p className="text-sm text-gray-600">
-                  o haz clic para seleccionar
-                </p>
-              </div>
-              <div className="text-xs text-gray-500">
-                <p>Formatos soportados: PDF, JPG, PNG</p>
-                <p>Tamaño máximo: 10MB</p>
-              </div>
+            <div>
+              <p className="text-gray-700 font-medium">Arrastra archivos aquí o haz clic para seleccionar</p>
+              <p className="text-sm text-gray-500 mt-2">
+                Soporta: JPEG, PNG, WebP, GIF, BMP, TIFF, HEIC, AVIF, SVG, ICO, WebM, PDF (máx. 25MB)
+              </p>
             </div>
           )}
         </div>
+      )}
 
-        {/* Errores de archivo */}
-        {fileRejectionItems.length > 0 && (
-          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <div className="flex items-center">
-              <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
-              <h3 className="text-sm font-medium text-red-800">
-                Archivos rechazados
-              </h3>
+      {/* Archivo seleccionado */}
+      {selectedFile && (
+        <div className="bg-gray-50 rounded-lg p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-white rounded border">
+                {getFileIcon(selectedFile)}
+              </div>
+              <div>
+                <p className="font-medium text-gray-900">{selectedFile.name}</p>
+                <p className="text-sm text-gray-500">
+                  {formatFileSize(selectedFile.size)} • {getFileDescription(selectedFile)}
+                </p>
+              </div>
             </div>
-            <ul className="mt-2 text-sm text-red-700">
-              {fileRejectionItems}
-            </ul>
-          </div>
-        )}
-
-        {/* Barra de progreso */}
-        {uploading && (
-          <div className="mt-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">
-                Procesando documento...
-              </span>
-              <span className="text-sm text-gray-500">
-                {uploadProgress}%
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-primary-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${uploadProgress}%` }}
-              ></div>
+            
+            <div className="flex items-center space-x-2 text-green-600">
+              <CheckCircleIcon className="h-5 w-5" />
+              <span className="text-sm">Listo para procesar</span>
             </div>
           </div>
-        )}
 
-        {/* Botón de procesar */}
-        {uploadedFile && !uploading && (
-          <div className="mt-6">
-            <button
-              onClick={handleUpload}
-              disabled={uploading}
-              className="btn-primary w-full flex justify-center items-center"
-            >
-              {uploading ? (
-                <>
-                  <div className="loading-spinner mr-2"></div>
-                  Procesando...
-                </>
-              ) : (
-                <>
-                  <File className="h-5 w-5 mr-2" />
-                  Procesar Documento
-                </>
-              )}
-            </button>
+          {/* Información del procesamiento */}
+          <div className="bg-white rounded-lg p-4 border">
+            <h4 className="font-medium text-gray-900 mb-3">
+              🚀 Procesamiento automático en servidor
+            </h4>
+            
+            {/* Mostrar procesos específicos para este archivo */}
+            <div className="space-y-2 text-sm text-gray-600">
+              {getProcessingInfo(selectedFile).map((process, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>{process}</span>
+                </div>
+              ))}
+            </div>
+            
+            {/* Información especial para formatos específicos */}
+            {needsSpecialProcessing(selectedFile) && (
+              <div className="mt-3 p-2 bg-amber-50 rounded text-xs text-amber-700">
+                ⚡ Este formato requiere conversión especial - se procesará automáticamente
+              </div>
+            )}
+            
+            <div className="mt-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
+              ✨ Optimización automática para máxima calidad OCR y menor peso
+            </div>
           </div>
-        )}
-
-        {/* Información adicional */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-blue-900 mb-2">
-            💡 ¿Qué documentos puedo subir?
-          </h3>
-          <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Facturas y recibos en PDF o imagen</li>
-            <li>• Documentos con texto claro y legible</li>
-            <li>• Archivos de hasta 10MB de tamaño</li>
-            <li>• Formatos: PDF, JPG, PNG</li>
-          </ul>
         </div>
-      </div>
+      )}
+
+      {/* Estado de procesamiento */}
+      {isProcessing && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center space-x-3">
+            <ArrowPathIcon className="h-6 w-6 text-blue-600 animate-spin" />
+            <div>
+              <p className="font-medium text-blue-800">Procesando archivo...</p>
+              <p className="text-sm text-blue-600">{processingStep}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="bg-red-50 border-l-4 border-red-400 p-4">
+          <p className="text-red-700">{error}</p>
+        </div>
+      )}
+
+      {/* Botones */}
+      {selectedFile && !isProcessing && (
+        <div className="flex gap-4">
+          <button
+            onClick={handleProcess}
+            className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium flex items-center justify-center space-x-2"
+          >
+            <CloudArrowUpIcon className="h-5 w-5" />
+            <span>🚀 Procesar en Servidor</span>
+          </button>
+          
+          <button
+            onClick={onCancel}
+            className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-medium"
+          >
+            Cancelar
+          </button>
+        </div>
+      )}
+
+
     </div>
   );
-} 
+};
+
+export default UploadForm; 
