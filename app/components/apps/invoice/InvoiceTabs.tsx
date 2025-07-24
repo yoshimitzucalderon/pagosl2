@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 
 const tabData = [
   {
-    key: 0,
+    key: 'create',
     label: 'Crear',
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M12 2V22M2 12H22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -13,7 +13,7 @@ const tabData = [
     match: '/invoice/create',
   },
   {
-    key: 1,
+    key: 'edit',
     label: 'Editar',
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M3 17.25V21h3.75l11.06-11.06a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.76 3.76 1.83-1.83z" fill="currentColor"/></svg>
@@ -22,7 +22,7 @@ const tabData = [
     match: '/invoice/edit',
   },
   {
-    key: 2,
+    key: 'detail',
     label: 'Detalle',
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -31,7 +31,7 @@ const tabData = [
     match: '/invoice/detail',
   },
   {
-    key: 3,
+    key: 'list',
     label: 'Listado',
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle"><path d="M3 7H21M3 12H21M3 17H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -56,11 +56,11 @@ const InvoiceTabs = () => {
   const handleTabClick = (tab) => {
     const tabObj = tabData[tab];
     if (tabObj) {
-      if (tabObj.key === 1 && pathname.includes('/invoice/edit/')) {
+      if (tabObj.key === 'edit' && pathname.includes('/invoice/edit/')) {
         // Ya estamos en la edición específica
         return;
       }
-      if (tabObj.key === 2 && pathname.includes('/invoice/detail/')) {
+      if (tabObj.key === 'detail' && pathname.includes('/invoice/detail/')) {
         return;
       }
       router.push(tabObj.path);
