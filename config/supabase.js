@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-// 🔄 REEMPLAZA CON TUS DATOS REALES DE SUPABASE
-const supabaseUrl = 'https://TU-PROYECTO.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Tu ANON KEY
+// 🔄 DATOS REALES DE SUPABASE
+const supabaseUrl = 'https://bmcscxzddfyttjdudkeh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtY3NjeHpkZGZ5dHRqZHVka2VoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA0OTU1NTYsImV4cCI6MjA2NjA3MTU1Nn0.Lk55d_BURUc9VXvpQIAJtZeGr9S2nQSi51PYerIbgmI'; // ANON KEY REAL
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -30,13 +30,20 @@ export const uploadDocument = async (file, userEmail = 'usuario@ycm360.com', use
 
     console.log('📡 Respuesta HTTP:', response.status, response.statusText);
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    // NUEVO: Lee el texto de la respuesta para depuración
+    const text = await response.text();
+    console.log('📦 Respuesta RAW:', text);
 
-    const result = await response.json();
-    console.log('✅ Documento procesado exitosamente:', result);
-    return result;
+    // Intenta parsear solo si hay texto
+    if (text) {
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        throw new Error('Respuesta de n8n no es JSON válido: ' + text);
+      }
+    } else {
+      throw new Error('Respuesta vacía de n8n');
+    }
   } catch (error) {
     console.error('❌ Error uploading document:', error);
     throw error;
