@@ -290,7 +290,7 @@ import { useState, useCallback } from 'react';
 export const useN8NService = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingMessage, setProcessingMessage] = useState('');
-  const [processingProgress, setProcessingProgress] = useState(0);
+  const [processingProgress, setProcessingProgress] = useState<number | null>(null);
 
   const processDocument = useCallback(async (
     file: File, 
@@ -314,14 +314,14 @@ export const useN8NService = () => {
       setTimeout(() => {
         setIsProcessing(false);
         setProcessingMessage('');
-        setProcessingProgress(0);
+        setProcessingProgress(null);
       }, 1000);
 
       return result;
 
     } catch (error) {
       setProcessingMessage(error instanceof Error ? error.message : 'Error desconocido');
-      setProcessingProgress(0);
+      setProcessingProgress(null);
       
       // Limpiar mensaje de error después de un tiempo
       setTimeout(() => {
@@ -352,14 +352,14 @@ export const useN8NService = () => {
       setTimeout(() => {
         setIsProcessing(false);
         setProcessingMessage('');
-        setProcessingProgress(0);
+        setProcessingProgress(null);
       }, 1000);
 
       return result;
 
     } catch (error) {
       setProcessingMessage(error instanceof Error ? error.message : 'Error desconocido');
-      setProcessingProgress(0);
+      setProcessingProgress(null);
       
       setTimeout(() => {
         setIsProcessing(false);
@@ -373,7 +373,7 @@ export const useN8NService = () => {
   const resetState = useCallback(() => {
     setIsProcessing(false);
     setProcessingMessage('');
-    setProcessingProgress(0);
+    setProcessingProgress(null);
   }, []);
 
   return {

@@ -6,6 +6,7 @@ import { submitManualEntry, getProjectsList, getFrequentProviders, getFrequentCo
 import { paymentExtendedSchema, formasPagoOptions, monedasOptions } from '../lib/validations';
 import { FileText, Save, AlertCircle } from 'lucide-react';
 import { getCurrentDateForInput } from '../utils/formatters';
+import ProviderSuggestions from './ProviderSuggestions';
 
 export default function ManualForm({ onSuccess, onError }) {
   const [formData, setFormData] = useState({
@@ -144,14 +145,23 @@ export default function ManualForm({ onSuccess, onError }) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Proveedor *
                 </label>
-                <input
-                  type="text"
-                  value={formData.proveedor_proceso_l2}
-                  onChange={(e) => handleChange('proveedor_proceso_l2', e.target.value)}
-                  className={`input-field ${errors.proveedor_proceso_l2 ? 'border-red-500 focus:ring-red-500' : ''}`}
-                  placeholder="Nombre del proveedor"
-                  list="providers-list"
-                />
+                <div className="relative flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={formData.proveedor_proceso_l2}
+                    onChange={(e) => handleChange('proveedor_proceso_l2', e.target.value)}
+                    className={`input-field flex-1 ${errors.proveedor_proceso_l2 ? 'border-red-500 focus:ring-red-500' : ''}`}
+                    placeholder="Nombre del proveedor"
+                    list="providers-list"
+                  />
+                  {/* Botón Mágico */}
+                  <ProviderSuggestions
+                    currentValue={formData.proveedor_proceso_l2}
+                    onSelect={(provider) => {
+                      handleChange('proveedor_proceso_l2', provider);
+                    }}
+                  />
+                </div>
                 <datalist id="providers-list">
                   {frequentProviders.map((provider, index) => (
                     <option key={index} value={provider} />
@@ -159,6 +169,13 @@ export default function ManualForm({ onSuccess, onError }) {
                 </datalist>
                 {errors.proveedor_proceso_l2 && (
                   <p className="mt-1 text-sm text-red-600">{errors.proveedor_proceso_l2}</p>
+                )}
+                {/* Indicador visual cuando el campo tiene sugerencias disponibles */}
+                {formData.proveedor_proceso_l2 && formData.proveedor_proceso_l2.length >= 2 && (
+                  <p className="text-xs text-purple-600 mt-1 flex items-center gap-1">
+                    <span>✨</span>
+                    Haz clic en la varita mágica para buscar proveedores similares
+                  </p>
                 )}
               </div>
 

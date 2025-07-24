@@ -9,6 +9,7 @@ import UploadForm from "../../../../../components/UploadForm";
 import { RotateCcw, Save, AlertTriangle } from "lucide-react";
 import { supabase } from '../../../../../lib/supabase';
 import { useAuth } from '@/app/context/AuthContext';
+import ProviderSuggestions from '../../../../../components/ProviderSuggestions';
 
 function CreateInvoice() {
   const { addInvoice, invoices } = useContext(InvoiceContext);
@@ -376,15 +377,26 @@ function CreateInvoice() {
             
             <div>
               <label className="block text-sm font-medium mb-1">Proveedor *:</label>
-              <input 
-                type="text" 
-                name="proveedor_proceso_l2" 
-                value={manualForm.proveedor_proceso_l2} 
-                onChange={handleManualChange} 
-                className="w-full rounded px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500" 
-                placeholder="Nombre del proveedor"
-                required
-              />
+              <div className="relative flex items-center gap-2">
+                <input 
+                  type="text" 
+                  name="proveedor_proceso_l2" 
+                  value={manualForm.proveedor_proceso_l2} 
+                  onChange={handleManualChange} 
+                  className="flex-1 rounded px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500" 
+                  placeholder="Nombre del proveedor"
+                  required
+                />
+                <ProviderSuggestions
+                  currentValue={manualForm.proveedor_proceso_l2}
+                  onSelect={(provider) => {
+                    setManualForm(prev => ({
+                      ...prev,
+                      proveedor_proceso_l2: provider
+                    }));
+                  }}
+                />
+              </div>
             </div>
             
             <div className="md:col-span-2">

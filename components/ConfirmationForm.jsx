@@ -6,6 +6,7 @@ import { confirmAndSave, checkDuplicatePayment, getProjectsList } from '../lib/a
 import { confirmationSchema } from '../lib/validations';
 import { CheckCircle, AlertTriangle, Edit3, Save, X } from 'lucide-react';
 import { formatCurrencyMXN, formatCurrencyUSD, formatDate } from '../utils/formatters';
+import ProviderSuggestions from './ProviderSuggestions';
 
 export default function ConfirmationForm({ data, onConfirm, onCancel, loading: parentLoading }) {
   const [editedData, setEditedData] = useState(data || {});
@@ -158,15 +159,31 @@ export default function ConfirmationForm({ data, onConfirm, onCancel, loading: p
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Proveedor *
               </label>
-              <input
-                type="text"
-                value={editedData.proveedor_proceso_l2 || ''}
-                onChange={(e) => handleChange('proveedor_proceso_l2', e.target.value)}
-                className={`input-field ${errors.proveedor_proceso_l2 ? 'border-red-500 focus:ring-red-500' : ''}`}
-                placeholder="Nombre del proveedor"
-              />
+              <div className="relative flex items-center gap-2">
+                <input
+                  type="text"
+                  value={editedData.proveedor_proceso_l2 || ''}
+                  onChange={(e) => handleChange('proveedor_proceso_l2', e.target.value)}
+                  className={`input-field flex-1 ${errors.proveedor_proceso_l2 ? 'border-red-500 focus:ring-red-500' : ''}`}
+                  placeholder="Nombre del proveedor"
+                />
+                {/* Botón Mágico */}
+                <ProviderSuggestions
+                  currentValue={editedData.proveedor_proceso_l2 || ''}
+                  onSelect={(provider) => {
+                    handleChange('proveedor_proceso_l2', provider);
+                  }}
+                />
+              </div>
               {errors.proveedor_proceso_l2 && (
                 <p className="mt-1 text-sm text-red-600">{errors.proveedor_proceso_l2}</p>
+              )}
+              {/* Indicador visual cuando el campo tiene sugerencias disponibles */}
+              {editedData.proveedor_proceso_l2 && editedData.proveedor_proceso_l2.length >= 2 && (
+                <p className="text-xs text-purple-600 mt-1 flex items-center gap-1">
+                  <span>✨</span>
+                  Haz clic en la varita mágica para buscar proveedores similares
+                </p>
               )}
             </div>
 

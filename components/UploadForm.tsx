@@ -196,7 +196,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ onProcessed, onCancel }) => {
             </div>
             
             {/* Barra de progreso */}
-            {isProcessing && processingProgress > 0 && (
+            {isProcessing && processingProgress !== null && processingProgress > 0 && (
               <div className="space-y-2">
                 <div className="flex items-center justify-center space-x-2">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
