@@ -27,7 +27,8 @@ function CreateInvoice() {
     moneda: 'MXN',
     pagado_proceso_l2: '',
     nota_proceso_l2: '',
-    proyecto: 'General'
+    proyecto: 'General',
+    tc_pagado: ''
   });
 
   // Estado para proyectos disponibles
@@ -56,19 +57,42 @@ function CreateInvoice() {
   // Función para obtener proyectos desde Supabase
   const fetchProjects = async (): Promise<void> => {
     try {
+      console.log('🔄 Cargando proyectos desde Supabase...');
+      
       const { data, error } = await supabase
         .from('erp_proyectos')
         .select('proyecto')
         .order('proyecto');
       
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Error en Supabase:', error);
+        throw error;
+      }
+      
+      console.log('📊 Proyectos obtenidos de Supabase:', data);
+      console.log('📊 Tipo de datos:', typeof data);
+      console.log('📊 Es array:', Array.isArray(data));
+      console.log('📊 Longitud:', data?.length);
+      
+      if (!data || data.length === 0) {
+        console.warn('⚠️ No se encontraron proyectos en la tabla erp_proyectos');
+        // Usar proyectos de respaldo
+        const fallbackProjects = ['General', 'Everett', 'Nueva la Tierra', 'Showroom EV/NLT', 'A1', 'A2', 'Oficina', 'Arboreta', 'Otros'];
+        setAvailableProjects(fallbackProjects);
+        console.log('🔄 Usando proyectos de respaldo:', fallbackProjects);
+        return;
+      }
       
       const projects = data.map((item: any) => item.proyecto);
       setAvailableProjects(projects);
+      
+      console.log('✅ Proyectos cargados exitosamente:', projects);
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error('❌ Error fetching projects:', error);
       // Fallback projects
-      setAvailableProjects(['General', 'Everett', 'Nueva la Tierra', 'Showroom EV/NLT', 'A1', 'A2', 'Oficina', 'Arboreta', 'Otros']);
+      const fallbackProjects = ['General', 'Everett', 'Nueva la Tierra', 'Showroom EV/NLT', 'A1', 'A2', 'Oficina', 'Arboreta', 'Otros'];
+      setAvailableProjects(fallbackProjects);
+      console.log('🔄 Usando proyectos de respaldo:', fallbackProjects);
     }
   };
 
@@ -88,7 +112,8 @@ function CreateInvoice() {
       moneda: processedData.moneda || 'MXN',
       pagado_proceso_l2: processedData.pagado_proceso_l2?.toString() || '',
       nota_proceso_l2: processedData.nota_proceso_l2 || '',
-      proyecto: processedData.proyecto || 'General'
+      proyecto: processedData.proyecto || 'General',
+      tc_pagado: processedData.tc_pagado?.toString() || ''
     };
     
     console.log('📝 Datos mapeados al formulario:', mappedData);
@@ -241,7 +266,8 @@ function CreateInvoice() {
       moneda: 'MXN',
       pagado_proceso_l2: '',
       nota_proceso_l2: '',
-      proyecto: 'General'
+      proyecto: 'General',
+      tc_pagado: ''
     });
     setOcrData(null);
     setProcessingMessage("");
@@ -251,6 +277,7 @@ function CreateInvoice() {
   const isManualFormFilled = Object.entries(manualForm).some(([key, value]) => {
     if (key === 'moneda' && value === 'MXN') return false; // valor por defecto
     if (key === 'proyecto' && value === 'General') return false; // valor por defecto
+    if (key === 'tc_pagado' && (!value || value === '')) return false; // tipo de cambio es opcional
     return value && value.toString().trim() !== '';
   });
 
@@ -402,19 +429,33 @@ function CreateInvoice() {
               />
             </div>
             
-            <div>
-              <label className="block text-sm font-medium mb-1">Proyecto:</label>
-              <select 
-                name="proyecto" 
-                value={manualForm.proyecto} 
-                onChange={handleManualChange} 
-                className="w-full rounded px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-              >
-                {availableProjects.map(project => (
-                  <option key={project} value={project}>{project}</option>
-                ))}
-              </select>
-            </div>
+                         <div>
+               <label className="block text-sm font-medium mb-1">Proyecto:</label>
+               <select 
+                 name="proyecto" 
+                 value={manualForm.proyecto} 
+                 onChange={handleManualChange} 
+                 className="w-full rounded px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+               >
+                 {availableProjects.map(project => (
+                   <option key={project} value={project}>{project}</option>
+                 ))}
+               </select>
+             </div>
+             
+             <div>
+               <label className="block text-sm font-medium mb-1">Tipo de cambio:</label>
+               <input 
+                 type="number" 
+                 name="tc_pagado" 
+                 value={manualForm.tc_pagado} 
+                 onChange={handleManualChange} 
+                 className="w-full rounded px-3 py-2 border border-gray-300 focus:border-blue-500 focus:ring-blue-500" 
+                 placeholder="1.00"
+                 min="0"
+                 step="0.01"
+               />
+             </div>
             
             <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-1">Notas:</label>
