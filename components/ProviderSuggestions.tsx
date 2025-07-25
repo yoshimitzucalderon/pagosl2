@@ -51,18 +51,17 @@ const ProviderSuggestions: React.FC<ProviderSuggestionsProps> = ({
     try {
       console.log('🪄 Buscando proveedores similares para:', currentValue);
       
-             // Llamada directa al webhook de n8n (funciona perfectamente)
-       const response = await fetch('https://n8n.ycm360.com/webhook/provider-suggestions', {
+             // Usar nuestro proxy local de Next.js
+       const response = await fetch('/api/provider-suggestions', {
          method: 'POST',
          headers: {
            'Content-Type': 'application/json',
-           'User-Agent': 'SistemaPagos-Web/1.0'
          },
          body: JSON.stringify({
            search_term: currentValue.trim(),
            max_results: 3
          }),
-         signal: AbortSignal.timeout(10000) // 10 segundos timeout
+         signal: AbortSignal.timeout(15000) // 15 segundos timeout
        });
 
       if (!response.ok) {
